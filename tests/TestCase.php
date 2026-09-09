@@ -1,0 +1,18 @@
+<?php
+
+namespace Tests;
+
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Http;
+
+abstract class TestCase extends BaseTestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Http::fake([
+            'http://localhost:3000/api/v1/cms/site' => Http::response(['pages' => []], 200),
+        ]);
+    }
+}
+
