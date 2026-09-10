@@ -3,26 +3,35 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class CmsService
 {
-    public function __construct(private readonly NestApiClient $api) {}
+    public function __construct(
+        private readonly NestApiClient $api,
+        private readonly LaravelApiClient $laravel,
+        private readonly PlatformCmsReader $platform,
+    ) {}
 
     public function site(): array
     {
-        return Cache::remember('karnacab.cms.site', 60, function () {
-            try {
-                $payload = $this->api->cmsSite();
-                if (! empty($payload['pages'])) {
-                    return $this->normalize($payload);
-                }
-            } catch (Throwable) {
-                // Render fallback copy when Nest is down.
-            }
+        $cached = Cache::get('karnacab.cms.site');
+        if (is_array($cached) && ! empty($cached['catalog']['rideTypes'])) {
+            return $cached;
+        }
 
-            return $this->fallback();
-        });
+        $payload = $this->platform->site()
+            ?? $this->loadFromNest()
+            ?? $this->loadFromLaravel()
+            ?? $this->fallback();
+        $payload = $this->normalize($payload);
+
+        if (! empty($payload['catalog']['rideTypes'])) {
+            Cache::put('karnacab.cms.site', $payload, 60);
+        }
+
+        return $payload;
     }
 
     public function page(string $slug): ?array
@@ -48,6 +57,45 @@ class CmsService
         ];
     }
 
+    private function loadFromNest(): ?array
+    {
+        try {
+            $payload = $this->api->cmsSite();
+            if (! empty($payload['pages']) || ! empty($payload['catalog']['rideTypes'])) {
+                return $payload;
+            }
+        } catch (Throwable $error) {
+            Log::warning('KarnaCab CMS Nest API failed: '.$error->getMessage());
+        }
+
+        return null;
+    }
+
+    private function loadFromLaravel(): ?array
+    {
+        try {
+            $catalog = $this->laravel->rideCatalog();
+            if ($catalog === []) {
+                return null;
+            }
+
+            $fallback = $this->fallback();
+            $fallback['catalog'] = array_merge($fallback['catalog'], [
+                'rideTypes' => $catalog['rideTypes'] ?? $fallback['catalog']['rideTypes'],
+                'vehicleTypes' => $catalog['vehicleTypes'] ?? $fallback['catalog']['vehicleTypes'],
+                'packages' => $catalog['packages'] ?? [],
+                'rideServices' => $catalog['rideServices'] ?? [],
+                'districts' => $catalog['districts'] ?? [],
+            ]);
+
+            return $fallback;
+        } catch (Throwable $error) {
+            Log::warning('KarnaCab CMS Laravel API failed: '.$error->getMessage());
+        }
+
+        return null;
+    }
+
     private function normalize(array $payload): array
     {
         $payload['site'] = is_array($payload['site'] ?? null) ? $payload['site'] : [];
@@ -56,6 +104,14 @@ class CmsService
         $payload['catalog'] = is_array($payload['catalog'] ?? null) ? $payload['catalog'] : [];
         $payload['faqs'] = is_array($payload['faqs'] ?? null) ? $payload['faqs'] : [];
         $payload['promo'] = is_array($payload['promo'] ?? null) ? $payload['promo'] : [];
+
+        $defaults = config('karnacab.default_catalog', []);
+        if (empty($payload['catalog']['rideTypes'])) {
+            $payload['catalog']['rideTypes'] = $defaults['rideTypes'] ?? [];
+        }
+        if (empty($payload['catalog']['vehicleTypes'])) {
+            $payload['catalog']['vehicleTypes'] = $defaults['vehicleTypes'] ?? [];
+        }
 
         return $payload;
     }
@@ -82,11 +138,13 @@ class CmsService
             ];
         }
 
-        return $this->normalize([
+        $defaults = config('karnacab.default_catalog', []);
+
+        return [
             'site' => [
                 'name' => 'KarnaCab',
                 'tagline' => 'Bike, auto, and cab across Bihar',
-                'footerBlurb' => 'Rides, parcel, travel, bulk and corporate. Live catalog loads from the KarnaCab API.',
+                'footerBlurb' => 'Rides, parcel, travel, bulk and corporate.',
                 'contactEmail' => '',
                 'contactPhone' => '',
                 'canonicalHost' => '',
@@ -98,14 +156,14 @@ class CmsService
             'pages' => $pages,
             'nav' => [],
             'catalog' => [
-                'rideTypes' => [],
-                'vehicleTypes' => [],
+                'rideTypes' => $defaults['rideTypes'] ?? [],
+                'vehicleTypes' => $defaults['vehicleTypes'] ?? [],
                 'districts' => [],
                 'packages' => [],
                 'rentalPackages' => [],
                 'rideServices' => [],
             ],
             'faqs' => [],
-        ]);
+        ];
     }
 }

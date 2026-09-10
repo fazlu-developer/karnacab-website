@@ -69,7 +69,10 @@ class NestApiClient
     {
         $url = $this->baseUrl.'/'.ltrim($path, '/');
 
-        $pending = Http::acceptJson()->timeout($this->timeout);
+        $pending = Http::acceptJson()
+            ->timeout($this->timeout)
+            ->connectTimeout(5)
+            ->retry(1, 200);
         if (strtolower($method) === 'post') {
             return $pending->asJson()->post($url, $payload);
         }

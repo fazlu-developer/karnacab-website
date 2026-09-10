@@ -1,0 +1,28 @@
+# KarnaCab website — cPanel
+# Point the domain at this folder (website/). Requests go to public/ without /public in the URL.
+# If you can, set document root to website/public instead; this file still works either way.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block hidden env files
+    RewriteRule ^\.env - [F,L]
+    RewriteRule ^\.env\.production - [F,L]
+
+    # Force HTTPS (comment these 2 lines if SSL is not active yet)
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Already in public/ — do nothing extra
+    RewriteCond %{REQUEST_URI} ^/public/ [NC]
+    RewriteRule .* - [L]
+
+    # Send everything into Laravel public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>
+
+DirectoryIndex public/index.php index.php

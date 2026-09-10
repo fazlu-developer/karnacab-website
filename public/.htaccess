@@ -3,7 +3,11 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    Options +FollowSymLinks
     RewriteEngine On
+
+    # If the site lives in a subfolder, change this (example: /public/)
+    RewriteBase /
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
@@ -23,3 +27,5 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+DirectoryIndex index.php
