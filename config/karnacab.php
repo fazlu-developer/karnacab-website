@@ -2,7 +2,7 @@
 
 return [
     'api' => [
-        'base_url' => rtrim((string) env('NEST_API_URL', 'http://localhost:3000/api/v1'), '/'),
+        'base_url' => rtrim((string) env('NEST_API_URL', 'http://127.0.0.1:8003/api/v1'), '/'),
         'timeout' => (int) env('NEST_API_TIMEOUT', 10),
     ],
     'laravel' => [

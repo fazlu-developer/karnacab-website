@@ -11,7 +11,7 @@ class NestApiClientTest extends TestCase
     {
         $client = NestApiClient::make();
 
-        $this->assertSame('http://localhost:3000/api/v1', $client->baseUrl());
+        $this->assertSame('http://127.0.0.1:8003/api/v1', $client->baseUrl());
     }
 
     public function test_laravel_api_client_points_at_management_admin(): void

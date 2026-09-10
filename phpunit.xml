@@ -32,7 +32,7 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
-        <env name="NEST_API_URL" value="http://localhost:3000/api/v1"/>
+        <env name="NEST_API_URL" value="http://127.0.0.1:8003/api/v1"/>
         <env name="LARAVEL_API_URL" value="http://127.0.0.1:8001/api/v1"/>
         <env name="WEBSITE_BOOKING_SECRET" value="karnacab-test-website"/>
     </php>

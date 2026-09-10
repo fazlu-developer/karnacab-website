@@ -11,7 +11,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         Http::fake([
-            'http://localhost:3000/api/v1/cms/site' => Http::response(['pages' => []], 200),
+            'http://127.0.0.1:8003/api/v1/cms/site' => Http::response(['pages' => []], 200),
         ]);
     }
 }
