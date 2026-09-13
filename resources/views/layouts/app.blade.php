@@ -73,8 +73,7 @@
                     <button class="btn" type="submit">Log out</button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'is-active' : '' }}">Log in</a>
-                <a class="btn" href="{{ route('register') }}">Create account</a>
+                <a class="btn" href="{{ route('login') }}">Log in</a>
             @endauth
         </nav>
     </header>
@@ -134,7 +133,6 @@
                         <li><a href="{{ route('dashboard') }}">Account</a></li>
                     @else
                         <li><a href="{{ route('login') }}">Log in</a></li>
-                        <li><a href="{{ route('register') }}">Create account</a></li>
                     @endauth
                 </ul>
             </div>

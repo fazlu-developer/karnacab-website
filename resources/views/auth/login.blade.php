@@ -23,9 +23,8 @@
                     <input id="password" name="password" type="password" required autocomplete="current-password">
                     @error('password') <div class="error">{{ $message }}</div> @enderror
 
-                    <p><button class="btn wide" type="submit">Continue</button></p>
+                    <p><button class="btn wide" type="submit">Log in</button></p>
                 </form>
-                <p class="muted">New here? <a href="{{ route('register') }}">Create an account</a></p>
             </section>
         </div>
     </div>
