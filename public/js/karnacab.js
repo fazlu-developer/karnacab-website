@@ -89,18 +89,30 @@ function initPlaceSearch() {
                 fetch('/places/suggest?q=' + encodeURIComponent(q), { headers: { Accept: 'application/json' } })
                     .then((res) => res.json())
                     .then((payload) => {
-                        const rows = payload.predictions || [];
+                        const rows = payload.predictions || payload.suggestions || [];
                         list.innerHTML = '';
+                        if (rows.length === 0) {
+                            const empty = document.createElement('li');
+                            empty.className = 'place-empty';
+                            empty.textContent = payload.error ? 'Place search unavailable' : 'No matching places';
+                            list.appendChild(empty);
+                            list.hidden = false;
+                            return;
+                        }
                         rows.forEach((row) => {
                             const item = document.createElement('li');
                             const btn = document.createElement('button');
                             btn.type = 'button';
-                            btn.textContent = row.address || row.title;
+                            const title = row.title || row.description || row.address || '';
+                            const sub = row.subtitle || '';
+                            btn.innerHTML = '<strong></strong>' + (sub ? '<small></small>' : '');
+                            btn.querySelector('strong').textContent = title;
+                            if (sub) btn.querySelector('small').textContent = sub;
                             btn.addEventListener('click', () => selectPlace(input, list, row));
                             item.appendChild(btn);
                             list.appendChild(item);
                         });
-                        list.hidden = rows.length === 0;
+                        list.hidden = false;
                     })
                     .catch(() => {
                         list.hidden = true;
@@ -116,7 +128,7 @@ function initPlaceSearch() {
 }
 
 function selectPlace(input, list, row) {
-    input.value = row.address || row.title || '';
+    input.value = row.address || row.title || row.description || '';
     list.hidden = true;
     const latName = input.getAttribute('data-place-lat');
     const lngName = input.getAttribute('data-place-lng');

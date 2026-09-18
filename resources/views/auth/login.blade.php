@@ -7,7 +7,8 @@
         <aside class="auth-visual">
             <div class="eyebrow">Customer account</div>
             <h2>Welcome back to KarnaCab.</h2>
-            <p>Sign in to your Phase 1 website account. Trip booking is not enabled yet.</p>
+                <p>Customer login is for website bookings. Operators use the admin console.</p>
+                <p><a class="btn ghost" href="{{ config('karnacab.admin_url') }}/login">Operator login</a></p>
         </aside>
         <div class="auth-form-wrap">
             <section class="auth-card">

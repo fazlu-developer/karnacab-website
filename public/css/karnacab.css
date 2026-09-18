@@ -93,7 +93,8 @@ button, input { font-family: inherit; }
     font-size: 0.95rem;
 }
 
-.brand span { color: var(--amber); }
+.brand-name { display: inline; white-space: nowrap; }
+.brand-name span { color: var(--amber); }
 
 .nav-toggle {
     display: none;
@@ -281,8 +282,18 @@ select:focus {
     border-radius: 28px;
     padding: 22px;
     backdrop-filter: blur(10px);
+    overflow: visible;
 }
 .hero-panel label { color: rgba(255,255,255,.78); }
+.hero-panel .pill {
+    color: var(--ink);
+    background: #fff;
+}
+.hero-panel .pill.active,
+.hero-panel .pill:has(input:checked) {
+    background: var(--ink);
+    color: #fff;
+}
 .hero-panel .soon-note { background: rgba(0,0,0,.28); color: rgba(255,255,255,.72); }
 .hero-panel .error { color: #fecaca; }
 
@@ -326,6 +337,7 @@ select:focus {
     padding: 10px 8px;
     border-radius: 14px;
     background: var(--paper);
+    color: var(--ink);
     font-weight: 700;
     font-size: .85rem;
 }
@@ -341,7 +353,7 @@ select:focus {
 .place-field { position: relative; }
 .place-suggest {
     position: absolute;
-    z-index: 20;
+    z-index: 80;
     left: 0;
     right: 0;
     margin: 0;
@@ -362,7 +374,8 @@ select:focus {
     padding: 8px 12px;
     cursor: pointer;
 }
-.place-suggest button:hover { background: var(--mint); }
+.place-suggest button small { display: block; color: var(--muted); font-size: .8rem; }
+.place-suggest .place-empty { padding: 10px 12px; color: var(--muted); font-size: .85rem; }
 .book-steps {
     display: flex;
     gap: 12px;

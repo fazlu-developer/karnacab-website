@@ -22,7 +22,8 @@
                 <p class="lede">{{ $page['lede'] }}</p>
                 <div class="hero-actions">
                     <a class="btn" href="{{ route('book') }}">Book a ride</a>
-                    <a class="btn ghost" href="{{ route('rides') }}">See ride types</a>
+                    <a class="btn ghost" href="{{ route('drive') }}">Drive with us</a>
+                    <a class="btn ghost" href="{{ config('karnacab.admin_url') }}/login">Operator login</a>
                 </div>
                 @if (!empty($promo['title']))
                     <p class="muted"><a href="{{ $promo['href'] ?? route('railway') }}">{{ $promo['title'] }} — {{ $promo['cta'] ?? 'Learn more' }}</a></p>

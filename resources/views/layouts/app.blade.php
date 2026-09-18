@@ -49,7 +49,7 @@
     <header class="site-header">
         <a class="brand" href="{{ route('home') }}">
             <span class="brand-mark" aria-hidden="true">K</span>
-            Karna<span>Cab</span> {{ $brandSuffix ?? '' }}
+            <span class="brand-name">Karna<span>Cab</span></span>{{ $brandSuffix ?? '' }}
         </a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu">☰</button>
         <nav class="site-nav" data-site-nav>
@@ -65,7 +65,10 @@
                 <a href="{{ route('contact') }}">Contact</a>
             @endforelse
             <a href="{{ route('book') }}" class="{{ request()->routeIs('book') ? 'is-active' : '' }}">Book</a>
+            <a href="{{ route('cities') }}" class="{{ request()->routeIs('cities') ? 'is-active' : '' }}">Cities</a>
+            <a href="{{ route('operators') }}" class="{{ request()->routeIs('operators') ? 'is-active' : '' }}">Operators</a>
             <a href="{{ route('route') }}" class="{{ request()->routeIs('route') ? 'is-active' : '' }}">Get route</a>
+            <a href="{{ config('karnacab.admin_url') }}/login" rel="noopener">Operator login</a>
             @auth
                 <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'is-active' : '' }}">Account</a>
                 <form class="nav-form" method="POST" action="{{ route('logout') }}">
@@ -88,7 +91,7 @@
             <div>
                 <a class="brand" href="{{ route('home') }}">
                     <span class="brand-mark" aria-hidden="true">K</span>
-                    Karna<span>Cab</span>
+                    <span class="brand-name">Karna<span>Cab</span></span>
                 </a>
                 <p>{{ $site['footerBlurb'] ?? $site['tagline'] ?? 'KarnaCab' }}</p>
                 @if (!empty($site['contactPhone']))

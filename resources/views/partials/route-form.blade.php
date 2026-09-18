@@ -1,7 +1,7 @@
 @php
     $pickupValue = $pickup ?? request('pickup');
     $dropValue = $drop ?? request('drop');
-    $vehicleValue = $vehicle ?? request('vehicle', 'cab');
+    $vehicleValue = $vehicle ?? request('vehicle', 'bike');
     $prefix = $idPrefix ?? '';
 @endphp
 <form class="route-form" method="GET" action="{{ route('route') }}">

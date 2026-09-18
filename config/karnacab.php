@@ -10,11 +10,13 @@ return [
         'timeout' => (int) env('LARAVEL_API_TIMEOUT', 12),
         'booking_secret' => env('WEBSITE_BOOKING_SECRET', 'karnacab-dev-website'),
     ],
+    'google_maps_key' => (string) env('GOOGLE_MAPS_API', ''),
     'maps' => [
         'nominatim_url' => rtrim((string) env('OSM_NOMINATIM_URL', 'https://nominatim.openstreetmap.org'), '/'),
         'osrm_url' => rtrim((string) env('OSRM_URL', 'https://router.project-osrm.org'), '/'),
         'timeout' => (int) env('MAPS_TIMEOUT', 8),
     ],
+    'admin_url' => rtrim((string) env('ADMIN_PUBLIC_URL', 'https://admin.karnacab.in'), '/'),
     'default_catalog' => [
         'rideTypes' => [
             ['key' => 'LOCAL_CAB', 'title' => 'Local Cab'],

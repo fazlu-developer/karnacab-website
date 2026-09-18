@@ -14,22 +14,28 @@ class WebsiteBookingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        config(['karnacab.google_maps_key' => 'test-maps-key']);
         Http::fake([
-            '*/cms/site' => Http::response(['pages' => []], 200),
-            'http://127.0.0.1:8001/api/v1/places/autocomplete*' => Http::response([
+            'https://maps.googleapis.com/maps/api/place/autocomplete/json*' => Http::response([
+                'status' => 'OK',
                 'predictions' => [[
-                    'placeId' => 'ChIJdrop',
-                    'title' => 'Gandhi Maidan',
-                    'address' => 'Gandhi Maidan, Patna',
+                    'place_id' => 'ChIJdrop',
+                    'description' => 'Gandhi Maidan, Patna',
+                    'structured_formatting' => [
+                        'main_text' => 'Gandhi Maidan',
+                        'secondary_text' => 'Patna',
+                    ],
                 ]],
             ], 200),
-            'http://127.0.0.1:8001/api/v1/places/details*' => Http::response([
-                'placeId' => 'ChIJdrop',
-                'title' => 'Gandhi Maidan',
-                'address' => 'Gandhi Maidan, Patna',
-                'lat' => 25.61,
-                'lng' => 85.14,
+            'https://maps.googleapis.com/maps/api/place/details/json*' => Http::response([
+                'status' => 'OK',
+                'result' => [
+                    'name' => 'Gandhi Maidan',
+                    'formatted_address' => 'Gandhi Maidan, Patna',
+                    'geometry' => ['location' => ['lat' => 25.61, 'lng' => 85.14]],
+                ],
             ], 200),
+            '*/cms/site' => Http::response(['pages' => []], 200),
             'http://127.0.0.1:8001/api/v1/rides/catalog' => Http::response([
                 'products' => [['key' => 'LOCAL_CAB', 'title' => 'Local Cab']],
                 'vehicles' => [['key' => 'SEDAN', 'title' => 'Sedan']],

@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\LaravelApiClient;
+use App\Services\GooglePlacesService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Throwable;
 
 class RoutePreviewController extends Controller
 {
-    public function __invoke(Request $request, LaravelApiClient $api): View
+    public function __invoke(Request $request, GooglePlacesService $places): View
     {
         $pickup = trim((string) $request->query('pickup', ''));
         $drop = trim((string) $request->query('drop', ''));
-        $vehicle = $request->query('vehicle', 'cab');
+        $vehicle = $request->query('vehicle', 'bike');
         if (! in_array($vehicle, ['bike', 'auto', 'cab'], true)) {
-            $vehicle = 'cab';
+            $vehicle = 'bike';
         }
 
         $result = [
@@ -45,8 +45,8 @@ class RoutePreviewController extends Controller
         ]);
 
         try {
-            $from = $this->resolvePoint($api, $validated['pickup'], $validated['pickup_lat'] ?? null, $validated['pickup_lng'] ?? null);
-            $to = $this->resolvePoint($api, $validated['drop'], $validated['drop_lat'] ?? null, $validated['drop_lng'] ?? null);
+            $from = $this->resolvePoint($places, $validated['pickup'], $validated['pickup_lat'] ?? null, $validated['pickup_lng'] ?? null);
+            $to = $this->resolvePoint($places, $validated['drop'], $validated['drop_lat'] ?? null, $validated['drop_lng'] ?? null);
         } catch (Throwable) {
             $result['error'] = 'Could not look up those places right now. Try again in a moment.';
 
@@ -63,7 +63,7 @@ class RoutePreviewController extends Controller
         $result['to'] = $to;
 
         try {
-            $route = $api->directions($from['lat'], $from['lng'], $to['lat'], $to['lng']);
+            $route = $places->directions($from['lat'], $from['lng'], $to['lat'], $to['lng']);
         } catch (Throwable) {
             $result['error'] = 'Places found, but the road route could not be loaded. Pins are shown on the map.';
 
@@ -79,17 +79,16 @@ class RoutePreviewController extends Controller
     /**
      * @return array{label: string, lat: float, lng: float}|null
      */
-    private function resolvePoint(LaravelApiClient $api, string $query, mixed $lat, mixed $lng): ?array
+    private function resolvePoint(GooglePlacesService $places, string $query, mixed $lat, mixed $lng): ?array
     {
         if ($lat !== null && $lng !== null && $lat !== '' && $lng !== '') {
             return ['label' => $query, 'lat' => (float) $lat, 'lng' => (float) $lng];
         }
-        $suggest = $api->placeAutocomplete($query);
-        $first = $suggest['predictions'][0] ?? null;
+        $first = $places->autocomplete($query)[0] ?? null;
         if (! is_array($first) || empty($first['placeId'])) {
             return null;
         }
-        $place = $api->placeDetails((string) $first['placeId']);
+        $place = $places->details((string) $first['placeId']);
         if (empty($place['lat']) && empty($place['lng'])) {
             return null;
         }

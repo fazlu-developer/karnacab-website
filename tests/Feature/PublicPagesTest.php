@@ -56,6 +56,8 @@ class PublicPagesTest extends TestCase
             '/bulk-booking',
             '/fleet-partner',
             '/advertise',
+            '/cities',
+            '/operators',
             '/login',
             '/register',
             '/sitemap.xml',
@@ -74,7 +76,13 @@ class PublicPagesTest extends TestCase
             ->assertSee('name="pickup"', false)
             ->assertSee('name="drop"', false)
             ->assertSee('data-place-search', false)
-            ->assertSee('Get route');
+            ->assertSee('Get route')
+            ->assertSee('Auto')
+            ->assertSee('Cab')
+            ->assertSee('class="brand-name"', false)
+            ->assertSee('Karna<span>Cab</span>', false)
+            ->assertDontSee('Karna Cab')
+            ->assertDontSee("The use statement with non-compound name 'Throwable'");
     }
 
     public function test_contact_form_accepts_a_message(): void

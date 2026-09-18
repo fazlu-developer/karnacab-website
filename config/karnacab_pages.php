@@ -214,6 +214,50 @@ return [
         'nav_group' => 'company',
         'nav_label' => 'Advertise',
     ],
+    'cities' => [
+        'title' => 'Cities we serve',
+        'eyebrow' => 'Live network',
+        'lede' => 'KarnaCab is live in Bihar and Delhi. Other states see Coming soon in the app until we launch there.',
+        'template' => 'legal',
+        'nav_group' => 'primary',
+        'nav_label' => 'Cities',
+        'body' => [
+            'sections' => [
+                [
+                    'heading' => 'Bihar',
+                    'text' => 'Patna, Gaya and other districts in the catalog. State Head, District Head and franchise seats are exclusive per district.',
+                ],
+                [
+                    'heading' => 'Delhi',
+                    'text' => 'North East Delhi and other NCT districts. The same fare rules, KYC and live tracking apply.',
+                ],
+                [
+                    'heading' => 'Coming soon',
+                    'text' => 'If the customer or driver app is outside Bihar and Delhi, we show Coming soon after location is allowed. We will notify you when your city opens.',
+                ],
+            ],
+        ],
+    ],
+    'operators' => [
+        'title' => 'Operator console',
+        'eyebrow' => 'Partners',
+        'lede' => 'State Heads, District Heads, franchise owners and fleet operators manage their territory from the KarnaCab admin console.',
+        'template' => 'legal',
+        'nav_group' => 'company',
+        'nav_label' => 'Operators',
+        'body' => [
+            'sections' => [
+                [
+                    'heading' => 'Who logs in where',
+                    'text' => 'Customers book from the website or app. Captains use the driver app. Fleet owners, franchise, district and state teams use the operator console at admin.karnacab.in.',
+                ],
+                [
+                    'heading' => 'Territory rules',
+                    'text' => 'A State Head sees only their state. A District Head or exclusive franchise sees only their district. Super Admin sees the full network.',
+                ],
+            ],
+        ],
+    ],
     'contact' => [
         'title' => 'Contact',
         'eyebrow' => 'Hello',

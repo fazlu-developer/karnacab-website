@@ -37,13 +37,32 @@ class CmsService
     public function page(string $slug): ?array
     {
         $site = $this->site();
+        $found = null;
         foreach ($site['pages'] as $page) {
             if (($page['slug'] ?? '') === $slug) {
-                return $page;
+                $found = $page;
+                break;
             }
         }
+        $config = config('karnacab_pages.'.$slug);
+        if (is_array($config)) {
+            $found = array_merge($found ?? [
+                'slug' => $slug,
+                'path' => '/'.$slug,
+                'template' => $config['template'] ?? 'legal',
+            ], [
+                'slug' => $slug,
+                'title' => $config['title'] ?? ($found['title'] ?? $slug),
+                'eyebrow' => $config['eyebrow'] ?? ($found['eyebrow'] ?? ''),
+                'lede' => $config['lede'] ?? ($found['lede'] ?? ''),
+                'seoTitle' => ($config['title'] ?? 'KarnaCab').' | KarnaCab',
+                'seoDescription' => $config['lede'] ?? '',
+                'template' => $config['template'] ?? ($found['template'] ?? 'legal'),
+                'body' => $config['body'] ?? ($found['body'] ?? ['sections' => []]),
+            ]);
+        }
 
-        return null;
+        return $found;
     }
 
     public function home(): array
@@ -134,7 +153,7 @@ class CmsService
                 'productKey' => $row['product_key'] ?? null,
                 'navGroup' => $row['nav_group'] ?? 'rides',
                 'navLabel' => $row['nav_label'] ?? $row['title'],
-                'body' => ['sections' => []],
+                'body' => $row['body'] ?? ['sections' => []],
             ];
         }
 
