@@ -23,8 +23,13 @@
     <meta property="og:url" content="{{ $canonical }}">
     @if (!empty($site['ogImage']))
         <meta property="og:image" content="{{ $site['ogImage'] }}">
+    @else
+        <meta property="og:image" content="{{ asset('branding/karnacab-wordmark.png') }}">
     @endif
     <title>{{ $seoTitle }}</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/png" href="{{ asset('favicon-32.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -48,7 +53,7 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
         <a class="brand" href="{{ route('home') }}">
-            <span class="brand-mark" aria-hidden="true">K</span>
+            <img class="brand-mark-img" src="{{ asset('branding/karnacab-logo.png') }}" alt="KarnaCab" width="40" height="40">
             <span class="brand-name">Karna<span>Cab</span></span>{{ $brandSuffix ?? '' }}
         </a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu">☰</button>
@@ -90,7 +95,7 @@
         <div class="wrap footer-grid">
             <div>
                 <a class="brand" href="{{ route('home') }}">
-                    <span class="brand-mark" aria-hidden="true">K</span>
+                    <img class="brand-mark-img" src="{{ asset('branding/karnacab-logo.png') }}" alt="" width="40" height="40">
                     <span class="brand-name">Karna<span>Cab</span></span>
                 </a>
                 <p>{{ $site['footerBlurb'] ?? $site['tagline'] ?? 'KarnaCab' }}</p>

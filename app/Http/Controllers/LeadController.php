@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Services\NestApiClient;
+use App\Services\WebsiteLeadMailer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Throwable;
 
 class LeadController extends Controller
 {
-    public function store(Request $request, NestApiClient $api): RedirectResponse
+    public function store(Request $request, NestApiClient $api, WebsiteLeadMailer $mailer): RedirectResponse
     {
         $data = $request->validate([
             'type' => ['required', 'string'],
@@ -24,7 +25,9 @@ class LeadController extends Controller
         try {
             $api->createLead($data);
         } catch (Throwable $exception) {
-            return back()->withErrors(['api' => 'Could not reach the KarnaCab API: '.$exception->getMessage()])->withInput();
+            $mailer->send($data);
+
+            return back()->with('status', 'Request received. Our Bihar team will follow up.');
         }
 
         return back()->with('status', 'Request received. Our Bihar team will follow up.');

@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Mail\WebsiteLeadMail;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class PublicPagesTest extends TestCase
@@ -93,6 +95,24 @@ class PublicPagesTest extends TestCase
             'email' => 'rakesh@example.com',
             'message' => 'Need help with the route page.',
         ])->assertRedirect();
+    }
+
+    public function test_contact_emails_ops_when_api_is_down(): void
+    {
+        Mail::fake();
+        config(['karnacab.leads_notify_email' => 'ops@karnacab.test']);
+        $this->mock(\App\Services\NestApiClient::class, function ($mock) {
+            $mock->shouldReceive('createLead')->once()->andThrow(new \RuntimeException('API down'));
+        });
+
+        $this->post('/contact', [
+            'name' => 'Rakesh',
+            'phone' => '9876543210',
+            'email' => 'rakesh@example.com',
+            'message' => 'Need help with the route page.',
+        ])->assertRedirect();
+
+        Mail::assertSent(WebsiteLeadMail::class);
     }
 
     public function test_faq_redirects_to_support(): void

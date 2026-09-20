@@ -1,6 +1,6 @@
 @php $districts = $cms['catalog']['districts'] ?? []; @endphp
 <h2>Send a request</h2>
-<p class="muted">Creates a lead in the KarnaCab API. Confirming a paid trip happens in the customer app after sign-in.</p>
+<p class="muted">We email the KarnaCab team and save this in the admin panel. Paid trips are booked in the customer app after sign-in.</p>
 <form method="POST" action="{{ route('lead.store') }}">
     @csrf
     <input type="hidden" name="type" value="{{ $leadType }}">

@@ -17,6 +17,10 @@
                     <input id="name" name="name" type="text" value="{{ old('name') }}" required>
                     @error('name') <div class="error">{{ $message }}</div> @enderror
 
+                    <label for="phone">Phone</label>
+                    <input id="phone" name="phone" value="{{ old('phone') }}" required>
+                    @error('phone') <div class="error">{{ $message }}</div> @enderror
+
                     <label for="email">Email</label>
                     <input id="email" name="email" type="email" value="{{ old('email') }}" required>
                     @error('email') <div class="error">{{ $message }}</div> @enderror

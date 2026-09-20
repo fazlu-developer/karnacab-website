@@ -17,6 +17,7 @@ return [
         'timeout' => (int) env('MAPS_TIMEOUT', 8),
     ],
     'admin_url' => rtrim((string) env('ADMIN_PUBLIC_URL', 'https://admin.karnacab.in'), '/'),
+    'leads_notify_email' => (string) env('LEADS_NOTIFY_EMAIL', env('MAIL_FROM_ADDRESS', 'website.fazlu@gmail.com')),
     'default_catalog' => [
         'rideTypes' => [
             ['key' => 'LOCAL_CAB', 'title' => 'Local Cab'],
