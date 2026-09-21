@@ -27,9 +27,9 @@
         <meta property="og:image" content="{{ asset('branding/karnacab-wordmark.png') }}">
     @endif
     <title>{{ $seoTitle }}</title>
-    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
-    <link rel="icon" type="image/png" href="{{ asset('favicon-32.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="icon" href="{{ $site['faviconUrl'] ?? asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/png" href="{{ $site['faviconUrl'] ?? asset('favicon-32.png') }}">
+    <link rel="apple-touch-icon" href="{{ $site['faviconUrl'] ?? asset('apple-touch-icon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -53,8 +53,10 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
         <a class="brand" href="{{ route('home') }}">
-            <img class="brand-mark-img" src="{{ asset('branding/karnacab-logo.png') }}" alt="KarnaCab" width="40" height="40">
-            <span class="brand-name">Karna<span>Cab</span></span>{{ $brandSuffix ?? '' }}
+            <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?? asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaCab' }}">
+            @if (!empty($brandSuffix))
+                <span class="brand-suffix">{{ $brandSuffix }}</span>
+            @endif
         </a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu">☰</button>
         <nav class="site-nav" data-site-nav>
@@ -69,20 +71,11 @@
                 <a href="{{ route('franchise') }}">Franchise</a>
                 <a href="{{ route('contact') }}">Contact</a>
             @endforelse
-            <a href="{{ route('book') }}" class="{{ request()->routeIs('book') ? 'is-active' : '' }}">Book</a>
+            <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'is-active' : '' }}">About</a>
+            <a href="{{ route('book') }}" class="{{ request()->routeIs('book') ? 'is-active' : '' }}">Check fares</a>
             <a href="{{ route('cities') }}" class="{{ request()->routeIs('cities') ? 'is-active' : '' }}">Cities</a>
-            <a href="{{ route('operators') }}" class="{{ request()->routeIs('operators') ? 'is-active' : '' }}">Operators</a>
             <a href="{{ route('route') }}" class="{{ request()->routeIs('route') ? 'is-active' : '' }}">Get route</a>
-            <a href="{{ config('karnacab.admin_url') }}/login" rel="noopener">Operator login</a>
-            @auth
-                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'is-active' : '' }}">Account</a>
-                <form class="nav-form" method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="btn" type="submit">Log out</button>
-                </form>
-            @else
-                <a class="btn" href="{{ route('login') }}">Log in</a>
-            @endauth
+            <a class="btn" href="{{ route('download') }}">Get the apps</a>
         </nav>
     </header>
     <main id="main">
@@ -95,15 +88,30 @@
         <div class="wrap footer-grid">
             <div>
                 <a class="brand" href="{{ route('home') }}">
-                    <img class="brand-mark-img" src="{{ asset('branding/karnacab-logo.png') }}" alt="" width="40" height="40">
-                    <span class="brand-name">Karna<span>Cab</span></span>
+                    <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?? asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaCab' }}">
                 </a>
                 <p>{{ $site['footerBlurb'] ?? $site['tagline'] ?? 'KarnaCab' }}</p>
+                @if (!empty($site['address']))
+                    <p>{{ $site['address'] }}</p>
+                @endif
                 @if (!empty($site['contactPhone']))
                     <p>Phone: {{ $site['contactPhone'] }}</p>
                 @endif
                 @if (!empty($site['contactEmail']))
                     <p>Email: {{ $site['contactEmail'] }}</p>
+                @endif
+                @if (!empty($site['whatsappUrl']))
+                    <p><a href="{{ $site['whatsappUrl'] }}" rel="noopener">WhatsApp</a></p>
+                @endif
+                @if (!empty($site['facebookUrl']) || !empty($site['instagramUrl']) || !empty($site['youtubeUrl']))
+                    <p>
+                        @if (!empty($site['facebookUrl']))<a href="{{ $site['facebookUrl'] }}" rel="noopener">Facebook</a> @endif
+                        @if (!empty($site['instagramUrl']))<a href="{{ $site['instagramUrl'] }}" rel="noopener">Instagram</a> @endif
+                        @if (!empty($site['youtubeUrl']))<a href="{{ $site['youtubeUrl'] }}" rel="noopener">YouTube</a> @endif
+                    </p>
+                @endif
+                @if (!empty($site['mapEmbed']))
+                    <div class="footer-map">{!! $site['mapEmbed'] !!}</div>
                 @endif
             </div>
             <div>
@@ -124,7 +132,7 @@
                     @foreach (array_merge($ridesNav, $servicesNav) as $item)
                         <li><a href="{{ $item['path'] }}">{{ $item['label'] }}</a></li>
                     @endforeach
-                    <li><a href="{{ route('book') }}">Book a ride</a></li>
+                    <li><a href="{{ route('book') }}">Check fares</a></li>
                     <li><a href="{{ route('route') }}">Get route</a></li>
                 </ul>
             </div>
@@ -137,11 +145,8 @@
                         <li><a href="{{ route('privacy') }}">Privacy</a></li>
                         <li><a href="{{ route('terms') }}">Terms</a></li>
                     @endforelse
-                    @auth
-                        <li><a href="{{ route('dashboard') }}">Account</a></li>
-                    @else
-                        <li><a href="{{ route('login') }}">Log in</a></li>
-                    @endauth
+                    <li><a href="{{ route('download') }}">Get the apps</a></li>
+                    <li><a href="{{ config('karnacab.admin_url') }}/login" rel="noopener">Operator login</a></li>
                 </ul>
             </div>
         </div>

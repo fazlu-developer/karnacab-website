@@ -29,7 +29,7 @@
         <aside class="tile">
             <h3>Also useful</h3>
             <p class="muted"><a href="{{ route('support') }}">Support FAQs</a> · <a href="{{ route('route') }}">Get route</a></p>
-            <p class="muted">Account: <a href="{{ route('register') }}">create an account</a> or <a href="{{ route('login') }}">log in</a>.</p>
+            <p class="muted">Questions: <a href="{{ route('support') }}">Support FAQs</a> · <a href="{{ route('download') }}">Get the apps</a></p>
         </aside>
     </div>
 </section>

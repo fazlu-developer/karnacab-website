@@ -21,9 +21,9 @@
                 <h1>{{ $page['title'] }}</h1>
                 <p class="lede">{{ $page['lede'] }}</p>
                 <div class="hero-actions">
-                    <a class="btn" href="{{ route('book') }}">Book a ride</a>
-                    <a class="btn ghost" href="{{ route('drive') }}">Drive with us</a>
-                    <a class="btn ghost" href="{{ config('karnacab.admin_url') }}/login">Operator login</a>
+                    <a class="btn" href="{{ route('book') }}">Check fares</a>
+                    <a class="btn ghost" href="{{ route('download') }}">Get the apps</a>
+                    <a class="btn ghost" href="{{ route('about') }}">What is KarnaCab</a>
                 </div>
                 @if (!empty($promo['title']))
                     <p class="muted"><a href="{{ $promo['href'] ?? route('railway') }}">{{ $promo['title'] }} — {{ $promo['cta'] ?? 'Learn more' }}</a></p>
@@ -45,7 +45,7 @@
             <div class="section-head">
                 <div class="eyebrow">Ride options</div>
                 <h2>Choose how you move.</h2>
-                <p class="muted lede">Products below come from the live ride catalog. Fares are never printed here.</p>
+                <p class="muted lede">Products below come from the live ride catalog. Check a trip to see vehicle prices.</p>
             </div>
             <div class="grid-3">
                 @forelse ($rideTypes as $type)
@@ -67,6 +67,33 @@
                         <p><a href="{{ route('rides') }}">Explore rides</a></p>
                     </article>
                 @endforelse
+            </div>
+        </div>
+    </section>
+
+    <section class="section alt" id="about-karnacab">
+        <div class="wrap">
+            <div class="section-head">
+                <div class="eyebrow">What is KarnaCab</div>
+                <h2>Bihar’s ride, parcel and travel platform.</h2>
+                <p class="muted lede">KarnaCab connects passengers with verified captains for bike, auto, mini, sedan, SUV and traveller trips, plus local parcel and published travel packages. Plan on the website. Book in the app.</p>
+            </div>
+            <div class="grid-3">
+                <article class="tile">
+                    <h3>For riders</h3>
+                    <p class="muted">Check pickup to drop, compare vehicle fares, then book with OTP login, live tracking, wallet and invoices in the customer app.</p>
+                    <p><a href="{{ route('about') }}">Read about us</a></p>
+                </article>
+                <article class="tile">
+                    <h3>For captains</h3>
+                    <p class="muted">Onboard with KYC, go online in your district, accept trips and get paid through the driver wallet.</p>
+                    <p><a href="{{ route('drive') }}">Drive with us</a></p>
+                </article>
+                <article class="tile">
+                    <h3>For partners</h3>
+                    <p class="muted">Fleet owners, exclusive district franchises, corporate accounts and local ads run from the operator console.</p>
+                    <p><a href="{{ route('operators') }}">Operator console</a></p>
+                </article>
             </div>
         </div>
     </section>
@@ -103,4 +130,10 @@
             </section>
         </div>
     @endif
+
+    <section class="section">
+        <div class="wrap">
+            @include('partials.app-download')
+        </div>
+    </section>
 @endsection

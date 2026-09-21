@@ -26,10 +26,10 @@
             @endif
         </section>
         <aside class="tile">
-            <h3>Book this service</h3>
-            <p class="muted">Pickup, destination, fare and payment use Laravel ride APIs — not a separate website engine.</p>
-            <p><a class="btn dark" href="{{ route('book', array_filter(['product' => $page['productKey'] ?? null])) }}">Book a ride</a></p>
-            <p><a href="{{ route('route') }}">Map preview</a></p>
+            <h3>Continue in the app</h3>
+            <p class="muted">Check fares on the website. Confirm the trip in the customer app.</p>
+            <p><a class="btn dark" href="{{ route('book', array_filter(['product' => $page['productKey'] ?? null])) }}">Check fares</a></p>
+            <p><a href="{{ route('download') }}">Download apps</a></p>
         </aside>
     </div>
 </section>

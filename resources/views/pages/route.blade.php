@@ -24,9 +24,10 @@
                     <div class="route-summary">
                         <div><strong>{{ $distance_km }} km</strong><span class="muted">Distance</span></div>
                         <div><strong>{{ $duration_min }} min</strong><span class="muted">Typical time</span></div>
-                        <div><strong>{{ ucfirst($vehicle) }}</strong><span class="muted">Vehicle</span></div>
+                        <div><strong>{{ ucfirst($vehicle) }}</strong><span class="muted">Preferred</span></div>
                     </div>
                 @endif
+                @include('partials.vehicle-quotes', ['quotes' => $quotes ?? []])
             </div>
             <div
                 id="route-map"

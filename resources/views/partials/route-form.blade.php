@@ -32,6 +32,5 @@
     @error('drop') <div class="error">{{ $message }}</div> @enderror
 
     <button class="btn wide" type="submit">Get route</button>
-    <p class="soon-note">Destination search uses Google Places through Laravel. Book a ride to get a fare from the same APIs as the apps.</p>
-    <p><a href="{{ route('book') }}">Book a ride</a></p>
+    <p class="soon-note">We show vehicle fares after pickup and destination. Complete the trip in the customer app.</p>
 </form>

@@ -19,19 +19,78 @@ return [
     ],
     'about' => [
         'title' => 'About KarnaCab',
-        'eyebrow' => 'Company',
-        'lede' => 'One platform for customers, captains and partners.',
+        'eyebrow' => 'What is KarnaCab',
+        'lede' => 'KarnaCab is a mobility company for Bihar and Delhi: rides, parcel, travel packages, bulk booking and corporate transport on one platform.',
         'template' => 'legal',
         'nav_group' => 'company',
         'nav_label' => 'About',
+        'body' => [
+            'sections' => [
+                [
+                    'heading' => 'The short answer',
+                    'paragraphs' => [
+                        'KarnaCab is an app-first taxi and delivery network. Customers request bike, auto, mini, sedan, SUV or traveller trips. Captains accept those trips after KYC. District teams, franchises and fleet owners run the ground network from the operator console.',
+                        'This website is for reading, fare checks and partner enquiries. Live booking, OTP login, driver matching, tracking, wallet and invoices happen in the customer and driver apps.',
+                    ],
+                ],
+                [
+                    'heading' => 'What you can do',
+                    'paragraphs' => [
+                        'Riders: check pickup to destination, compare vehicle fares, then download the customer app to book.',
+                        'Captains: apply to drive, complete documents, go online in a live district and earn.',
+                        'Businesses: enquire for corporate billing, bulk vehicles, travel packages or local advertising.',
+                    ],
+                ],
+                [
+                    'heading' => 'Where we operate',
+                    'text' => 'KarnaCab is live in Bihar and Delhi. Other states see Coming soon in the apps until that city opens. Fares follow admin fare rules for each product and vehicle, not a number printed on a flyer.',
+                ],
+            ],
+        ],
     ],
     'how-it-works' => [
         'title' => 'How KarnaCab works',
         'eyebrow' => 'Guide',
-        'lede' => 'Preview a route, then send a booking request.',
+        'lede' => 'Plan on the website. Ride in the app.',
         'template' => 'legal',
         'nav_group' => 'company',
         'nav_label' => 'How it works',
+        'body' => [
+            'sections' => [
+                [
+                    'heading' => '1. Check your trip',
+                    'text' => 'Enter pickup and destination on Check fares or Get route. We show bike, auto, mini, sedan, SUV and traveller with estimated prices from the same fare engine as the apps.',
+                ],
+                [
+                    'heading' => '2. Download the customer app',
+                    'text' => 'Website booking is not completed in the browser. Proceed to book opens the download page so you can install the customer app.',
+                ],
+                [
+                    'heading' => '3. Book with OTP',
+                    'text' => 'In the app you confirm pickup, OTP start/end codes, cash or online payment, live tracking and invoices. SOS and trip share are in Safety.',
+                ],
+                [
+                    'heading' => '4. Captains go online',
+                    'text' => 'Drivers use the driver app. After KYC they receive nearby requests inside the search radius set by operations.',
+                ],
+            ],
+        ],
+    ],
+    'download' => [
+        'title' => 'Download the KarnaCab apps',
+        'eyebrow' => 'Get the apps',
+        'lede' => 'Please download the customer app to book, or the driver app to go online.',
+        'template' => 'download',
+        'nav_group' => 'primary',
+        'nav_label' => 'Apps',
+        'body' => [
+            'sections' => [
+                [
+                    'heading' => 'Why the apps',
+                    'text' => 'Matching, live GPS, OTP, wallet, push notifications and invoices need a phone. The website is the brochure and fare checker.',
+                ],
+            ],
+        ],
     ],
     'safety' => [
         'title' => 'Safety',

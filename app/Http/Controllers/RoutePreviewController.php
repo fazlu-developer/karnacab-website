@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Services\GooglePlacesService;
+use App\Services\TripFareService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Throwable;
 
 class RoutePreviewController extends Controller
 {
-    public function __invoke(Request $request, GooglePlacesService $places): View
+    public function __invoke(Request $request, GooglePlacesService $places, TripFareService $fares): View
     {
         $pickup = trim((string) $request->query('pickup', ''));
         $drop = trim((string) $request->query('drop', ''));
@@ -28,6 +29,7 @@ class RoutePreviewController extends Controller
             'distance_km' => null,
             'duration_min' => null,
             'error' => null,
+            'quotes' => [],
         ];
 
         if ($pickup === '' && $drop === '') {
@@ -72,6 +74,20 @@ class RoutePreviewController extends Controller
 
         $result['distance_km'] = $route['distanceKm'] ?? null;
         $result['duration_min'] = $route['durationMinutes'] ?? null;
+        $quotes = $fares->quotes([
+            'product' => 'LOCAL_CAB',
+            'distanceKm' => $result['distance_km'],
+            'pickupLat' => $from['lat'],
+            'pickupLng' => $from['lng'],
+            'dropLat' => $to['lat'],
+            'dropLng' => $to['lng'],
+            'pickupText' => $from['label'] ?? $pickup,
+            'dropText' => $to['label'] ?? $drop,
+        ]);
+        $result['quotes'] = $quotes['vehicles'];
+        if (! empty($quotes['comingSoon'])) {
+            $result['error'] = $quotes['message'] ?? 'Coming soon in this state.';
+        }
 
         return view('pages.route', $result);
     }

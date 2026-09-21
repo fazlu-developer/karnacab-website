@@ -35,7 +35,7 @@
             <aside class="tile">
                 <h3>Also useful</h3>
                 <p class="muted">Route problems: try a fuller landmark on Get route.</p>
-                <p class="muted">Account: <a href="{{ route('register') }}">create an account</a> or <a href="{{ route('login') }}">log in</a>.</p>
+                <p class="muted">Need a ride? <a href="{{ route('download') }}">Download the customer app</a>.</p>
                 <p class="muted">Safety notes: <a href="{{ route('safety') }}">Safety</a>.</p>
             </aside>
         </div>

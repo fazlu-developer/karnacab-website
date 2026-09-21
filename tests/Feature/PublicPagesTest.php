@@ -60,8 +60,7 @@ class PublicPagesTest extends TestCase
             '/advertise',
             '/cities',
             '/operators',
-            '/login',
-            '/register',
+            '/download',
             '/sitemap.xml',
             '/robots.txt',
         ];
@@ -81,8 +80,10 @@ class PublicPagesTest extends TestCase
             ->assertSee('Get route')
             ->assertSee('Auto')
             ->assertSee('Cab')
-            ->assertSee('class="brand-name"', false)
-            ->assertSee('Karna<span>Cab</span>', false)
+            ->assertSee('What is KarnaCab')
+            ->assertSee('Customer app')
+            ->assertSee('Driver app')
+            ->assertDontSee('Log in')
             ->assertDontSee('Karna Cab')
             ->assertDontSee("The use statement with non-compound name 'Throwable'");
     }
@@ -113,6 +114,20 @@ class PublicPagesTest extends TestCase
         ])->assertRedirect();
 
         Mail::assertSent(WebsiteLeadMail::class);
+    }
+
+    public function test_login_and_register_redirect_to_home(): void
+    {
+        $this->get('/login')->assertRedirect('/');
+        $this->get('/register')->assertRedirect('/');
+    }
+
+    public function test_about_explains_karnacab(): void
+    {
+        $this->get('/about')
+            ->assertOk()
+            ->assertSee('What is KarnaCab')
+            ->assertSee('app-first taxi');
     }
 
     public function test_faq_redirects_to_support(): void

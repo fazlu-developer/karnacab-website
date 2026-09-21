@@ -7,6 +7,11 @@
         @if (!empty($section['text']))
             <p>{{ $section['text'] }}</p>
         @endif
+        @if (!empty($section['paragraphs']) && is_array($section['paragraphs']))
+            @foreach ($section['paragraphs'] as $paragraph)
+                <p>{{ $paragraph }}</p>
+            @endforeach
+        @endif
         @if (!empty($section['steps']))
             <div class="grid-3">
                 @foreach ($section['steps'] as $index => $step)

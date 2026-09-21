@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -35,10 +34,22 @@ class WebsiteBookingTest extends TestCase
                     'geometry' => ['location' => ['lat' => 25.61, 'lng' => 85.14]],
                 ],
             ], 200),
+            'https://maps.googleapis.com/maps/api/directions/json*' => Http::response([
+                'status' => 'OK',
+                'routes' => [[
+                    'legs' => [[
+                        'distance' => ['value' => 4200],
+                        'duration' => ['value' => 720],
+                    ]],
+                    'overview_polyline' => ['points' => 'abc'],
+                ]],
+            ], 200),
             '*/cms/site' => Http::response(['pages' => []], 200),
             'http://127.0.0.1:8001/api/v1/rides/catalog' => Http::response([
                 'products' => [['key' => 'LOCAL_CAB', 'title' => 'Local Cab']],
+                'rideTypes' => [['key' => 'LOCAL_CAB', 'title' => 'Local Cab']],
                 'vehicles' => [['key' => 'SEDAN', 'title' => 'Sedan']],
+                'vehicleTypes' => [['key' => 'SEDAN', 'title' => 'Sedan']],
                 'rentalHours' => [8],
             ], 200),
             'http://127.0.0.1:8001/api/v1/rides/quote' => Http::response([
@@ -46,43 +57,20 @@ class WebsiteBookingTest extends TestCase
                 'totalPaise' => 15120,
                 'billedKm' => 10,
             ], 200),
-            'http://127.0.0.1:8001/api/v1/rides/bookings' => Http::response([
-                'id' => 44,
-                'publicRef' => 'KCWEB1',
-                'status' => 'REQUESTED',
-                'quotePaise' => 15120,
-                'pickupText' => 'Patna Junction',
-                'dropText' => 'Gandhi Maidan',
-                'passengerName' => 'Rakesh',
-            ], 201),
-            'http://127.0.0.1:8001/api/v1/rides/bookings/44/payments' => Http::response([
-                'booking' => ['id' => 44, 'publicRef' => 'KCWEB1', 'status' => 'REQUESTED', 'quotePaise' => 15120],
-                'payment' => ['id' => '9', 'status' => 'initiated', 'paymentReference' => 'KCP1', 'clientCaptureIgnored' => true],
-            ], 201),
-            'http://127.0.0.1:8001/api/v1/rides/bookings/44' => Http::response([
-                'id' => 44,
-                'publicRef' => 'KCWEB1',
-                'status' => 'REQUESTED',
-                'quotePaise' => 15120,
-                'pickupText' => 'Patna Junction',
-                'dropText' => 'Gandhi Maidan',
-                'passengerName' => 'Rakesh',
+            'http://127.0.0.1:8001/api/v1/places/directions' => Http::response([
+                'distanceKm' => 4.2,
+                'durationSeconds' => 720,
             ], 200),
         ]);
     }
 
-    public function test_book_page_and_google_place_proxy(): void
+    public function test_book_page_checks_fares_for_each_vehicle(): void
     {
-        $this->get('/book')->assertOk()->assertSee('data-place-search', false)->assertSee('Get fare estimate');
+        $this->get('/book')->assertOk()->assertSee('data-place-search', false)->assertSee('Check fares');
         $this->getJson('/places/suggest?q=Patna')->assertOk()->assertJsonPath('predictions.0.placeId', 'ChIJdrop');
-    }
 
-    public function test_logged_in_customer_quotes_books_and_pays_via_laravel_api(): void
-    {
-        $user = User::factory()->create(['role' => 'CUSTOMER']);
-        $this->actingAs($user)->post('/book/quote', [
+        $this->post('/book/quote', [
             'product' => 'LOCAL_CAB',
-            'category' => 'SEDAN',
             'pickupText' => 'Patna Junction',
             'dropText' => 'Gandhi Maidan',
             'pickupLat' => 25.6,
@@ -91,22 +79,31 @@ class WebsiteBookingTest extends TestCase
             'dropLng' => 85.14,
         ])->assertRedirect();
 
-        $this->actingAs($user)->post('/book', [
-            'product' => 'LOCAL_CAB',
-            'category' => 'SEDAN',
-            'pickupText' => 'Patna Junction',
-            'dropText' => 'Gandhi Maidan',
-            'passengerName' => 'Rakesh',
-            'passengerPhone' => '9876543210',
-        ])->assertRedirect(route('book'));
-
-        $this->actingAs($user)->post('/book/pay', [
-            'method' => 'upi',
-        ])->assertRedirect(route('book.confirm', ['id' => 44]));
-
-        $this->actingAs($user)->get('/book/confirm/44')
+        $this->get('/book')
             ->assertOk()
-            ->assertSee('KCWEB1')
-            ->assertSee('initiated');
+            ->assertSee('Sedan')
+            ->assertSee('Bike')
+            ->assertSee('₹151');
+    }
+
+    public function test_proceed_to_book_asks_to_download_the_app(): void
+    {
+        $this->post('/book/continue', ['category' => 'SEDAN'])
+            ->assertRedirect(route('download', ['category' => 'SEDAN']));
+
+        $this->get('/download')
+            ->assertOk()
+            ->assertSee('Please download')
+            ->assertSee('Customer app')
+            ->assertSee('Driver app')
+            ->assertSee('Download customer app');
+    }
+
+    public function test_route_check_lists_vehicle_prices(): void
+    {
+        $this->get('/route?pickup=Patna+Junction&drop=Gandhi+Maidan&pickup_lat=25.6&pickup_lng=85.1&drop_lat=25.61&drop_lng=85.14')
+            ->assertOk()
+            ->assertSee('Vehicles and fares')
+            ->assertSee('Proceed to book');
     }
 }

@@ -5,7 +5,7 @@
     $product = $page['productKey'] ?? '';
 @endphp
 <h2>Fare quote</h2>
-<p class="muted">Totals come from Laravel POST /api/v1/rides/quote (the same fare_rules engine as the apps). This is an estimate, not a confirmed booking.</p>
+<p class="muted">Totals come from Laravel fare rules. Confirm and pay in the customer app — this is an estimate only.</p>
 <form method="POST" action="{{ route('quote.preview') }}">
     @csrf
     <input type="hidden" name="product" value="{{ $product }}">

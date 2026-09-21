@@ -24,6 +24,8 @@
         @include('partials.cms-contact')
     @elseif ($template === 'legal')
         @include('partials.cms-legal')
+    @elseif ($template === 'download')
+        @include('partials.cms-download')
     @else
         @include('partials.cms-service')
     @endif

@@ -11,6 +11,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(NestApiClient::class, fn () => NestApiClient::make());
         $this->app->singleton(\App\Services\LaravelApiClient::class, fn () => \App\Services\LaravelApiClient::make());
+        $this->app->singleton(\App\Services\TripFareService::class);
     }
 
     public function boot(): void

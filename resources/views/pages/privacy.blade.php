@@ -10,10 +10,9 @@
     ])
     <section class="section">
         <div class="wrap prose">
-            <p>Account registration stores your name, email, and password hash in the website database for session login.</p>
-            <p>Pickup and drop text is sent to OpenStreetMap Nominatim and OSRM so we can draw a route. We do not store those searches as trip bookings.</p>
-            <p>Contact messages are written to application logs so the team can reply. Do not send payment card numbers.</p>
-            <p>This page will grow when live trips, wallets, and the mobile apps start collecting location in production.</p>
+            <p>Pickup and destination searches use Google Places so we can draw a route and estimate fares. We do not store those searches as trip bookings unless you enquire through a form.</p>
+            <p>Contact and partner forms are stored as website enquiries so the team can reply. Do not send payment card numbers.</p>
+            <p>Customer and driver accounts, location while on a trip, wallet and invoices are handled in the mobile apps, not by a website login.</p>
         </div>
     </section>
 @endsection

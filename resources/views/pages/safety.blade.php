@@ -23,12 +23,12 @@
             <article class="tile">
                 <div class="icon">💬</div>
                 <h3>Support</h3>
-                <p class="muted">Use Contact for website help. In-trip support will follow live bookings.</p>
+                <p class="muted">Use Contact for website help. In-trip support lives in the customer app.</p>
             </article>
             <article class="tile">
                 <div class="icon">🔒</div>
-                <h3>Account</h3>
-                <p class="muted">Create a website login to keep your customer shell in one place.</p>
+                <h3>Customer app</h3>
+                <p class="muted">Download the customer app for OTP login, live tracking and SOS. There is no website customer account.</p>
             </article>
         </div>
     </section>

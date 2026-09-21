@@ -17,6 +17,10 @@ return [
         'timeout' => (int) env('MAPS_TIMEOUT', 8),
     ],
     'admin_url' => rtrim((string) env('ADMIN_PUBLIC_URL', 'https://admin.karnacab.in'), '/'),
+    'apps' => [
+        'customer' => (string) env('CUSTOMER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps'),
+        'driver' => (string) env('DRIVER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps'),
+    ],
     'leads_notify_email' => (string) env('LEADS_NOTIFY_EMAIL', env('MAIL_FROM_ADDRESS', 'website.fazlu@gmail.com')),
     'default_catalog' => [
         'rideTypes' => [
