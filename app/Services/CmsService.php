@@ -123,7 +123,7 @@ class CmsService
         $payload['catalog'] = is_array($payload['catalog'] ?? null) ? $payload['catalog'] : [];
         $payload['faqs'] = is_array($payload['faqs'] ?? null) ? $payload['faqs'] : [];
         $payload['promo'] = is_array($payload['promo'] ?? null) ? $payload['promo'] : [];
-        foreach (['logoUrl', 'faviconUrl', 'ogImage', 'adminLogoUrl'] as $key) {
+        foreach (['logoUrl', 'faviconUrl', 'ogImage', 'adminLogoUrl', 'customerAppLogoUrl', 'driverAppLogoUrl'] as $key) {
             $payload['site'][$key] = $this->publicAsset($payload['site'][$key] ?? '');
         }
         if ($payload['site']['logoUrl'] === '') {
