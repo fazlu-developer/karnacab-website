@@ -27,9 +27,9 @@
         <meta property="og:image" content="{{ asset('branding/karnacab-wordmark.png') }}">
     @endif
     <title>{{ $seoTitle }}</title>
-    <link rel="icon" href="{{ $site['faviconUrl'] ?? asset('favicon.ico') }}" sizes="any">
-    <link rel="icon" type="image/png" href="{{ $site['faviconUrl'] ?? asset('favicon-32.png') }}">
-    <link rel="apple-touch-icon" href="{{ $site['faviconUrl'] ?? asset('apple-touch-icon.png') }}">
+    <link rel="icon" href="{{ $site['faviconUrl'] ?: asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/png" href="{{ $site['faviconUrl'] ?: asset('favicon-32.png') }}">
+    <link rel="apple-touch-icon" href="{{ $site['faviconUrl'] ?: asset('apple-touch-icon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
         <a class="brand" href="{{ route('home') }}">
-            <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?? asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaCab' }}">
+            <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?: asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaCab' }}">
             @if (!empty($brandSuffix))
                 <span class="brand-suffix">{{ $brandSuffix }}</span>
             @endif
@@ -88,7 +88,7 @@
         <div class="wrap footer-grid">
             <div>
                 <a class="brand" href="{{ route('home') }}">
-                    <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?? asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaCab' }}">
+                    <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?: asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaCab' }}">
                 </a>
                 <p>{{ $site['footerBlurb'] ?? $site['tagline'] ?? 'KarnaCab' }}</p>
                 @if (!empty($site['address']))

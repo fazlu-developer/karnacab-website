@@ -17,7 +17,7 @@ class CmsService
     public function site(): array
     {
         $cached = Cache::get('karnacab.cms.site');
-        if (is_array($cached) && ! empty($cached['catalog']['rideTypes'])) {
+        if (is_array($cached) && ! empty($cached['catalog']['rideTypes']) && ! empty($cached['site']['logoUrl'])) {
             return $cached;
         }
 
@@ -123,6 +123,18 @@ class CmsService
         $payload['catalog'] = is_array($payload['catalog'] ?? null) ? $payload['catalog'] : [];
         $payload['faqs'] = is_array($payload['faqs'] ?? null) ? $payload['faqs'] : [];
         $payload['promo'] = is_array($payload['promo'] ?? null) ? $payload['promo'] : [];
+        foreach (['logoUrl', 'faviconUrl', 'ogImage', 'adminLogoUrl'] as $key) {
+            $payload['site'][$key] = $this->publicAsset($payload['site'][$key] ?? '');
+        }
+        if ($payload['site']['logoUrl'] === '') {
+            $payload['site']['logoUrl'] = asset('branding/karnacab-logo-full.png');
+        }
+        if ($payload['site']['faviconUrl'] === '') {
+            $payload['site']['faviconUrl'] = asset('favicon-32.png');
+        }
+        if ($payload['site']['ogImage'] === '') {
+            $payload['site']['ogImage'] = $payload['site']['logoUrl'];
+        }
 
         $defaults = config('karnacab.default_catalog', []);
         if (empty($payload['catalog']['rideTypes'])) {
@@ -133,6 +145,23 @@ class CmsService
         }
 
         return $payload;
+    }
+
+    private function publicAsset(mixed $value): string
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return '';
+        }
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://') || str_starts_with($value, '//')) {
+            return $value;
+        }
+        $path = '/'.ltrim($value, '/');
+        if (str_starts_with($path, '/uploads/')) {
+            return rtrim((string) config('karnacab.admin_url'), '/').$path;
+        }
+
+        return asset(ltrim($path, '/'));
     }
 
     private function fallback(): array
