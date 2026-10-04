@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Log in - KarnaCab')
+@section('title', 'Log in - KarnaRide')
 
 @section('content')
     <div class="auth-shell">
         <aside class="auth-visual">
             <div class="eyebrow">Customer account</div>
-            <h2>Welcome back to KarnaCab.</h2>
+            <h2>Welcome back to KarnaRide.</h2>
                 <p>Customer login is for website bookings. Operators use the admin console.</p>
                 <p><a class="btn ghost" href="{{ config('karnacab.admin_url') }}/login">Operator login</a></p>
         </aside>

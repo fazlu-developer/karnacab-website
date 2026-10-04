@@ -6,8 +6,8 @@
     $servicesNav = $nav->firstWhere('group', 'services')['items'] ?? [];
     $companyNav = $nav->firstWhere('group', 'company')['items'] ?? [];
     $legalNav = $nav->firstWhere('group', 'legal')['items'] ?? [];
-    $seoTitle = trim($__env->yieldContent('title', $site['defaultSeoTitle'] ?? 'KarnaCab'));
-    $seoDescription = trim($__env->yieldContent('meta', $site['defaultSeoDescription'] ?? 'KarnaCab'));
+    $seoTitle = trim($__env->yieldContent('title', $site['defaultSeoTitle'] ?? 'KarnaRide'));
+    $seoDescription = trim($__env->yieldContent('meta', $site['defaultSeoDescription'] ?? 'KarnaRide'));
     $canonical = $site['canonicalHost'] ? rtrim($site['canonicalHost'], '/').request()->getPathInfo() : url()->current();
 @endphp
 <!DOCTYPE html>
@@ -38,7 +38,7 @@
         $jsonLd = [
             '@'.'context' => 'https://schema.org',
             '@'.'type' => 'Organization',
-            'name' => $site['name'] ?? 'KarnaCab',
+            'name' => $site['name'] ?? 'KarnaRide',
             'url' => url('/'),
             'description' => $site['defaultSeoDescription'] ?? '',
             'email' => ! empty($site['contactEmail']) ? $site['contactEmail'] : null,
@@ -53,7 +53,7 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
         <a class="brand" href="{{ route('home') }}">
-            <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?: asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaCab' }}">
+            <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?: asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaRide' }}">
             @if (!empty($brandSuffix))
                 <span class="brand-suffix">{{ $brandSuffix }}</span>
             @endif
@@ -88,9 +88,9 @@
         <div class="wrap footer-grid">
             <div>
                 <a class="brand" href="{{ route('home') }}">
-                    <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?: asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaCab' }}">
+                    <img class="brand-lockup-img" src="{{ $site['logoUrl'] ?: asset('branding/karnacab-logo-full.png') }}" alt="{{ $site['name'] ?? 'KarnaRide' }}">
                 </a>
-                <p>{{ $site['footerBlurb'] ?? $site['tagline'] ?? 'KarnaCab' }}</p>
+                <p>{{ $site['footerBlurb'] ?? $site['tagline'] ?? 'KarnaRide' }}</p>
                 @if (!empty($site['address']))
                     <p>{{ $site['address'] }}</p>
                 @endif
@@ -151,8 +151,8 @@
             </div>
         </div>
         <div class="wrap legal">
-            <span>© {{ date('Y') }} {{ $site['name'] ?? 'KarnaCab' }}</span>
-            <span>Public website · catalog from KarnaCab API</span>
+            <span>© {{ date('Y') }} {{ $site['name'] ?? 'KarnaRide' }}</span>
+            <span>Public website · catalog from KarnaRide API</span>
         </div>
     </footer>
     @stack('scripts')

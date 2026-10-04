@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Booking confirmation - KarnaCab')
+@section('title', 'Booking confirmation - KarnaRide')
 
 @section('content')
     @include('partials.page-hero', [
         'eyebrow' => 'Confirmation',
         'title' => 'Booking received',
-        'lede' => 'Your request is stored on the KarnaCab platform. Payment capture is server-side.',
+        'lede' => 'Your request is stored on the KarnaRide platform. Payment capture is server-side.',
     ])
     <section class="section">
         <div class="wrap">

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Rides - KarnaCab')
+@section('title', 'Rides - KarnaRide')
 
 @section('content')
     @include('partials.page-hero', [
         'eyebrow' => 'Services',
         'title' => 'Bike, auto, and cab',
-        'lede' => 'The same KarnaCab website covers every ride type. Choose how you want to travel, then preview pickup to drop.',
+        'lede' => 'The same KarnaRide website covers every ride type. Choose how you want to travel, then preview pickup to drop.',
     ])
     <section class="section">
         <div class="wrap grid-3">

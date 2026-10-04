@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Terms - KarnaCab')
+@section('title', 'Terms - KarnaRide')
 
 @section('content')
     @include('partials.page-hero', [
         'eyebrow' => 'Legal',
         'title' => 'Terms of use',
-        'lede' => 'Using the KarnaCab website and the map route tool.',
+        'lede' => 'Using the KarnaRide website and the map route tool.',
     ])
     <section class="section">
         <div class="wrap prose">

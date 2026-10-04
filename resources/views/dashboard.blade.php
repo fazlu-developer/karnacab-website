@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Account - KarnaCab')
+@section('title', 'Account - KarnaRide')
 
 @section('content')
     <div class="page">

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'How it works - KarnaCab')
+@section('title', 'How it works - KarnaRide')
 
 @section('content')
     @include('partials.page-hero', [
         'eyebrow' => 'Guide',
-        'title' => 'How KarnaCab works',
+        'title' => 'How KarnaRide works',
         'lede' => 'Use the website to plan a path now. A live driver will be part of a later release.',
     ])
     <section class="section">

@@ -69,7 +69,7 @@ class PlatformCmsReader
                 ])->all(),
             ];
         } catch (Throwable $error) {
-            Log::warning('KarnaCab platform DB CMS failed: '.$error->getMessage());
+            Log::warning('KarnaRide platform DB CMS failed: '.$error->getMessage());
 
             return null;
         }
@@ -101,7 +101,7 @@ class PlatformCmsReader
             'path' => $row->slug === 'home' ? '/' : '/'.$row->slug,
             'title' => $row->title,
             'eyebrow' => $row->eyebrow,
-            'seoTitle' => $row->seo_title ?: $row->title.' | KarnaCab',
+            'seoTitle' => $row->seo_title ?: $row->title.' | KarnaRide',
             'seoDescription' => $row->seo_description ?: $row->lede,
             'lede' => $row->lede,
             'body' => $body,

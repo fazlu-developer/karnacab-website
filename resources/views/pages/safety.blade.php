@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Safety - KarnaCab')
+@section('title', 'Safety - KarnaRide')
 
 @section('content')
     @include('partials.page-hero', [
         'eyebrow' => 'Trust',
         'title' => 'Safety on every trip',
-        'lede' => 'KarnaCab is being built so trip data, driver records, and support live in one platform.',
+        'lede' => 'KarnaRide is being built so trip data, driver records, and support live in one platform.',
     ])
     <section class="section">
         <div class="wrap grid-4">

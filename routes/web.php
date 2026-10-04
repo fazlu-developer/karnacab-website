@@ -30,8 +30,8 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/faq', fn () => redirect('/support', 301))->name('faq');
 Route::get('/drive-with-us', fn () => redirect('/drive', 301));
 Route::get('/advertise-with-us', fn () => redirect('/advertise', 301));
-Route::get('/login', fn () => redirect('/')->with('status', 'Book rides in the KarnaCab customer app.'))->name('login');
-Route::get('/register', fn () => redirect('/')->with('status', 'Create your account in the KarnaCab customer or driver app.'))->name('register');
+Route::get('/login', fn () => redirect('/')->with('status', 'Book rides in the KarnaRide customer app.'))->name('login');
+Route::get('/register', fn () => redirect('/')->with('status', 'Create your account in the KarnaRide customer or driver app.'))->name('register');
 
 foreach (array_keys(config('karnacab_pages')) as $slug) {
     if ($slug === 'home') {

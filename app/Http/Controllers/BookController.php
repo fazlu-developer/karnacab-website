@@ -39,7 +39,7 @@ class BookController extends Controller
             return back()->withInput()->withErrors(['quote' => $quotes['message'] ?? 'Coming soon in this state.']);
         }
 
-        return back()->withInput()->with('status', 'Choose a vehicle. Booking continues in the KarnaCab customer app.');
+        return back()->withInput()->with('status', 'Choose a vehicle. Booking continues in the KarnaRide customer app.');
     }
 
     public function continue(Request $request): RedirectResponse
@@ -51,7 +51,7 @@ class BookController extends Controller
 
         return redirect()->route('download', array_filter([
             'category' => $request->input('category'),
-        ]))->with('status', 'Please download the KarnaCab customer app to complete this booking.');
+        ]))->with('status', 'Please download the KarnaRide customer app to complete this booking.');
     }
 
     /**

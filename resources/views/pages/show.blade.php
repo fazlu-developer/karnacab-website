@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $page['seoTitle'] ?? ($page['title'].' | KarnaCab'))
+@section('title', $page['seoTitle'] ?? ($page['title'].' | KarnaRide'))
 @section('meta', $page['seoDescription'] ?? ($page['lede'] ?? ''))
 
 @section('content')

@@ -55,7 +55,7 @@ class CmsService
                 'title' => $config['title'] ?? ($found['title'] ?? $slug),
                 'eyebrow' => $config['eyebrow'] ?? ($found['eyebrow'] ?? ''),
                 'lede' => $config['lede'] ?? ($found['lede'] ?? ''),
-                'seoTitle' => ($config['title'] ?? 'KarnaCab').' | KarnaCab',
+                'seoTitle' => ($config['title'] ?? 'KarnaRide').' | KarnaRide',
                 'seoDescription' => $config['lede'] ?? '',
                 'template' => $config['template'] ?? ($found['template'] ?? 'legal'),
                 'body' => $config['body'] ?? ($found['body'] ?? ['sections' => []]),
@@ -69,7 +69,7 @@ class CmsService
     {
         return $this->page('home') ?? [
             'slug' => 'home',
-            'title' => 'KarnaCab',
+            'title' => 'KarnaRide',
             'lede' => 'Rides, parcel and travel in Bihar.',
             'template' => 'home',
             'body' => ['sections' => []],
@@ -84,7 +84,7 @@ class CmsService
                 return $payload;
             }
         } catch (Throwable $error) {
-            Log::warning('KarnaCab CMS Nest API failed: '.$error->getMessage());
+            Log::warning('KarnaRide CMS Nest API failed: '.$error->getMessage());
         }
 
         return null;
@@ -109,7 +109,7 @@ class CmsService
 
             return $fallback;
         } catch (Throwable $error) {
-            Log::warning('KarnaCab CMS Laravel API failed: '.$error->getMessage());
+            Log::warning('KarnaRide CMS Laravel API failed: '.$error->getMessage());
         }
 
         return null;
@@ -173,7 +173,7 @@ class CmsService
                 'path' => $slug === 'home' ? '/' : '/'.$slug,
                 'title' => $row['title'],
                 'eyebrow' => $row['eyebrow'] ?? '',
-                'seoTitle' => ($row['title'] ?? 'KarnaCab').' | KarnaCab',
+                'seoTitle' => ($row['title'] ?? 'KarnaRide').' | KarnaRide',
                 'seoDescription' => $row['lede'] ?? '',
                 'lede' => $row['lede'] ?? '',
                 'template' => $row['template'] ?? 'service',
@@ -190,14 +190,14 @@ class CmsService
 
         return [
             'site' => [
-                'name' => 'KarnaCab',
+                'name' => 'KarnaRide',
                 'tagline' => 'Bike, auto, and cab across Bihar',
                 'footerBlurb' => 'Rides, parcel, travel, bulk and corporate.',
                 'contactEmail' => '',
                 'contactPhone' => '',
                 'canonicalHost' => '',
-                'defaultSeoTitle' => 'KarnaCab',
-                'defaultSeoDescription' => 'KarnaCab public website',
+                'defaultSeoTitle' => 'KarnaRide',
+                'defaultSeoDescription' => 'KarnaRide public website',
                 'ogImage' => '',
             ],
             'promo' => [],

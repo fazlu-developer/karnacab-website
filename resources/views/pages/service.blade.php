@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $title.' - KarnaCab')
+@section('title', $title.' - KarnaRide')
 
 @section('content')
     @include('partials.page-hero', [
@@ -12,7 +12,7 @@
         <div class="wrap contact-layout">
             <section class="card">
                 <h2>Send a request</h2>
-                <p class="muted">This creates a lead in the shared KarnaCab database. It does not dispatch a driver.</p>
+                <p class="muted">This creates a lead in the shared KarnaRide database. It does not dispatch a driver.</p>
                 <form method="POST" action="{{ route('lead.store') }}">
                     @csrf
                     <input type="hidden" name="type" value="{{ $lead_type }}">

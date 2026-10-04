@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'FAQ - KarnaCab')
+@section('title', 'FAQ - KarnaRide')
 
 @section('content')
     @include('partials.page-hero', [

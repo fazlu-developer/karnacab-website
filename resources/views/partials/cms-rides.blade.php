@@ -14,7 +14,7 @@
             @empty
                 <article class="tile">
                     <h3>Vehicles</h3>
-                    <p class="muted">Vehicle types load from the KarnaCab API.</p>
+                    <p class="muted">Vehicle types load from the KarnaRide API.</p>
                 </article>
             @endforelse
         </div>

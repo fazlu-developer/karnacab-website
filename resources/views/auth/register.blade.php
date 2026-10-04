@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Create account - KarnaCab')
+@section('title', 'Create account - KarnaRide')
 
 @section('content')
     <div class="auth-shell">
@@ -12,7 +12,7 @@
         <div class="auth-form-wrap">
             <section class="auth-card">
                 <h1>Create account</h1>
-                <p class="muted">Customer shell for the KarnaCab public site.</p>
+                <p class="muted">Customer shell for the KarnaRide public site.</p>
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
                     <label for="name">Name</label>

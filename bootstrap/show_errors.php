@@ -41,7 +41,7 @@ function karnacab_error_html(string $title, string $message, string $file = '', 
 
     return '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'.$h($title).'</title></head>'
         .'<body style="font-family:Segoe UI,system-ui,sans-serif;max-width:920px;margin:40px auto;padding:0 20px;color:#111">'
-        .'<p style="color:#b45309;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:12px">KarnaCab website debug</p>'
+        .'<p style="color:#b45309;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:12px">KarnaRide website debug</p>'
         .'<h1 style="font-size:22px;line-height:1.3">'.$h($title).'</h1>'
         .'<p style="font-size:16px;background:#fff7ed;border:1px solid #fdba74;padding:12px 14px;border-radius:8px">'.$h($message).'</p>'
         .$meta

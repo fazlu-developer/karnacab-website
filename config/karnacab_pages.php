@@ -3,8 +3,8 @@
 return [
     'home' => [
         'title' => 'Ride when you need to go',
-        'eyebrow' => 'KarnaCab',
-        'lede' => 'KarnaCab is Bihar mobility: rides, parcel, travel, bulk booking and corporate.',
+        'eyebrow' => 'KarnaRide',
+        'lede' => 'KarnaRide is Bihar mobility: rides, parcel, travel, bulk booking and corporate.',
         'template' => 'home',
         'nav_group' => 'primary',
         'nav_label' => 'Home',
@@ -18,9 +18,9 @@ return [
         'nav_label' => 'Rides',
     ],
     'about' => [
-        'title' => 'About KarnaCab',
-        'eyebrow' => 'What is KarnaCab',
-        'lede' => 'KarnaCab is a mobility company for Bihar and Delhi: rides, parcel, travel packages, bulk booking and corporate transport on one platform.',
+        'title' => 'About KarnaRide',
+        'eyebrow' => 'What is KarnaRide',
+        'lede' => 'KarnaRide is a mobility company for Bihar and Delhi: rides, parcel, travel packages, bulk booking and corporate transport on one platform.',
         'template' => 'legal',
         'nav_group' => 'company',
         'nav_label' => 'About',
@@ -29,7 +29,7 @@ return [
                 [
                     'heading' => 'The short answer',
                     'paragraphs' => [
-                        'KarnaCab is an app-first taxi and delivery network. Customers request bike, auto, mini, sedan, SUV or traveller trips. Captains accept those trips after KYC. District teams, franchises and fleet owners run the ground network from the operator console.',
+                        'KarnaRide is an app-first taxi and delivery network. Customers request bike, auto, mini, sedan, SUV or traveller trips. Captains accept those trips after KYC. District teams, franchises and fleet owners run the ground network from the operator console.',
                         'This website is for reading, fare checks and partner enquiries. Live booking, OTP login, driver matching, tracking, wallet and invoices happen in the customer and driver apps.',
                     ],
                 ],
@@ -43,13 +43,13 @@ return [
                 ],
                 [
                     'heading' => 'Where we operate',
-                    'text' => 'KarnaCab is live in Bihar and Delhi. Other states see Coming soon in the apps until that city opens. Fares follow admin fare rules for each product and vehicle, not a number printed on a flyer.',
+                    'text' => 'KarnaRide is live in Bihar and Delhi. Other states see Coming soon in the apps until that city opens. Fares follow admin fare rules for each product and vehicle, not a number printed on a flyer.',
                 ],
             ],
         ],
     ],
     'how-it-works' => [
-        'title' => 'How KarnaCab works',
+        'title' => 'How KarnaRide works',
         'eyebrow' => 'Guide',
         'lede' => 'Plan on the website. Ride in the app.',
         'template' => 'legal',
@@ -77,7 +77,7 @@ return [
         ],
     ],
     'download' => [
-        'title' => 'Download the KarnaCab apps',
+        'title' => 'Download the KarnaRide apps',
         'eyebrow' => 'Get the apps',
         'lede' => 'Please download the customer app to book, or the driver app to go online.',
         'template' => 'download',
@@ -265,7 +265,7 @@ return [
     ],
     'advertise' => [
         'title' => 'Advertise With Us',
-        'eyebrow' => 'KarnaCab Ads',
+        'eyebrow' => 'KarnaRide Ads',
         'lede' => 'Register an advertiser account or send an enquiry.',
         'lead_type' => 'ADVERTISE',
         'register_kind' => 'advertiser',
@@ -276,7 +276,7 @@ return [
     'cities' => [
         'title' => 'Cities we serve',
         'eyebrow' => 'Live network',
-        'lede' => 'KarnaCab is live in Bihar and Delhi. Other states see Coming soon in the app until we launch there.',
+        'lede' => 'KarnaRide is live in Bihar and Delhi. Other states see Coming soon in the app until we launch there.',
         'template' => 'legal',
         'nav_group' => 'primary',
         'nav_label' => 'Cities',
@@ -300,7 +300,7 @@ return [
     'operators' => [
         'title' => 'Operator console',
         'eyebrow' => 'Partners',
-        'lede' => 'State Heads, District Heads, franchise owners and fleet operators manage their territory from the KarnaCab admin console.',
+        'lede' => 'State Heads, District Heads, franchise owners and fleet operators manage their territory from the KarnaRide admin console.',
         'template' => 'legal',
         'nav_group' => 'company',
         'nav_label' => 'Operators',
@@ -320,7 +320,7 @@ return [
     'contact' => [
         'title' => 'Contact',
         'eyebrow' => 'Hello',
-        'lede' => 'Send a support request. Stored as a lead in the KarnaCab API.',
+        'lede' => 'Send a support request. Stored as a lead in the KarnaRide API.',
         'lead_type' => 'SUPPORT',
         'template' => 'contact',
         'nav_group' => 'primary',

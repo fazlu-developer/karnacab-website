@@ -36,7 +36,7 @@ class PartnerRegisterController extends Controller
                 return back()->withErrors(['api' => 'Could not register driver: '.$exception->getMessage()])->withInput();
             }
 
-            return back()->with('status', 'Driver account created. Complete KYC in the KarnaCab driver app.');
+            return back()->with('status', 'Driver account created. Complete KYC in the KarnaRide driver app.');
         }
 
         $data = $request->validate([

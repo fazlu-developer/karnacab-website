@@ -80,7 +80,7 @@ class PublicPagesTest extends TestCase
             ->assertSee('Get route')
             ->assertSee('Auto')
             ->assertSee('Cab')
-            ->assertSee('What is KarnaCab')
+            ->assertSee('What is KarnaRide')
             ->assertSee('Customer app')
             ->assertSee('Driver app')
             ->assertDontSee('Log in')
@@ -126,7 +126,7 @@ class PublicPagesTest extends TestCase
     {
         $this->get('/about')
             ->assertOk()
-            ->assertSee('What is KarnaCab')
+            ->assertSee('What is KarnaRide')
             ->assertSee('app-first taxi');
     }
 

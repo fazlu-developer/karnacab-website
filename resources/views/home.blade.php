@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $page['seoTitle'] ?? 'KarnaCab')
+@section('title', $page['seoTitle'] ?? 'KarnaRide')
 @section('meta', $page['seoDescription'] ?? ($page['lede'] ?? ''))
 
 @section('content')
@@ -17,13 +17,13 @@
     <section class="hero">
         <div class="wrap hero-grid">
             <div>
-                <div class="eyebrow">{{ $page['eyebrow'] ?? ($cms['site']['tagline'] ?? 'KarnaCab') }}</div>
+                <div class="eyebrow">{{ $page['eyebrow'] ?? ($cms['site']['tagline'] ?? 'KarnaRide') }}</div>
                 <h1>{{ $page['title'] }}</h1>
                 <p class="lede">{{ $page['lede'] }}</p>
                 <div class="hero-actions">
                     <a class="btn" href="{{ route('book') }}">Check fares</a>
                     <a class="btn ghost" href="{{ route('download') }}">Get the apps</a>
-                    <a class="btn ghost" href="{{ route('about') }}">What is KarnaCab</a>
+                    <a class="btn ghost" href="{{ route('about') }}">What is KarnaRide</a>
                 </div>
                 @if (!empty($promo['title']))
                     <p class="muted"><a href="{{ $promo['href'] ?? route('railway') }}">{{ $promo['title'] }} — {{ $promo['cta'] ?? 'Learn more' }}</a></p>
@@ -63,7 +63,7 @@
                 @empty
                     <article class="tile">
                         <h3>Rides</h3>
-                        <p class="muted">Catalog will appear when the KarnaCab API is reachable.</p>
+                        <p class="muted">Catalog will appear when the KarnaRide API is reachable.</p>
                         <p><a href="{{ route('rides') }}">Explore rides</a></p>
                     </article>
                 @endforelse
@@ -74,9 +74,9 @@
     <section class="section alt" id="about-karnacab">
         <div class="wrap">
             <div class="section-head">
-                <div class="eyebrow">What is KarnaCab</div>
+                <div class="eyebrow">What is KarnaRide</div>
                 <h2>Bihar’s ride, parcel and travel platform.</h2>
-                <p class="muted lede">KarnaCab connects passengers with verified captains for bike, auto, mini, sedan, SUV and traveller trips, plus local parcel and published travel packages. Plan on the website. Book in the app.</p>
+                <p class="muted lede">KarnaRide connects passengers with verified captains for bike, auto, mini, sedan, SUV and traveller trips, plus local parcel and published travel packages. Plan on the website. Book in the app.</p>
             </div>
             <div class="grid-3">
                 <article class="tile">

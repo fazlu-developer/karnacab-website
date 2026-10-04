@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Book a ride - KarnaCab')
-@section('meta', 'Check pickup to destination fares for bike, auto, sedan and more. Complete booking in the KarnaCab customer app.')
+@section('title', 'Book a ride - KarnaRide')
+@section('meta', 'Check pickup to destination fares for bike, auto, sedan and more. Complete booking in the KarnaRide customer app.')
 
 @section('content')
     @php $trip = $trip ?? []; @endphp
