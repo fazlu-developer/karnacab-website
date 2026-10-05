@@ -21,7 +21,7 @@ return [
         'customer' => (string) env('CUSTOMER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps'),
         'driver' => (string) env('DRIVER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps'),
     ],
-    'leads_notify_email' => (string) env('LEADS_NOTIFY_EMAIL', env('MAIL_FROM_ADDRESS', 'karnacabofficial@gmail.com')),
+    'leads_notify_email' => (string) env('LEADS_NOTIFY_EMAIL', env('MAIL_FROM_ADDRESS', 'karnaride@gmail.com')),
     'default_catalog' => [
         'rideTypes' => [
             ['key' => 'LOCAL_CAB', 'title' => 'Local Cab'],
