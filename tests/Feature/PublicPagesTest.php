@@ -39,7 +39,6 @@ class PublicPagesTest extends TestCase
             '/safety',
             '/drive',
             '/support',
-            '/privacy',
             '/privacy-policy',
             '/delete-account',
             '/terms',
@@ -139,15 +138,12 @@ class PublicPagesTest extends TestCase
 
     public function test_privacy_policy_renders_copy(): void
     {
-        $this->get('/privacy')
+        $this->get('/privacy')->assertRedirect('/privacy-policy');
+        $this->get('/privacy-policy')
             ->assertOk()
             ->assertSee('Privacy Policy')
             ->assertSee('do not sell personal data')
             ->assertSee('precise location')
-            ->assertSee('LOCATION DATA WE ACCESS');
-        $this->get('/privacy-policy')
-            ->assertOk()
-            ->assertSee('Privacy Policy')
             ->assertSee('LOCATION DATA WE ACCESS');
         $this->get('/delete-account')
             ->assertOk()
@@ -161,6 +157,14 @@ class PublicPagesTest extends TestCase
             ->assertOk()
             ->assertSee('Cancellation')
             ->assertSee('2–3 business days');
+    }
+
+    public function test_footer_legal_does_not_repeat_cms_pages(): void
+    {
+        $html = $this->get('/')->assertOk()->getContent();
+        $this->assertSame(1, substr_count($html, '>Privacy</a>') + substr_count($html, '>Privacy Policy</a>'), $html);
+        $this->assertSame(1, substr_count($html, '>Terms</a>') + substr_count($html, '>Terms &amp; Conditions</a>'));
+        $this->assertStringNotContainsString('Operator login', $html);
     }
 
     public function test_faq_redirects_to_support(): void

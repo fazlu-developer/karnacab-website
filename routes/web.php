@@ -29,6 +29,7 @@ Route::post('/partners/register', [PartnerRegisterController::class, 'store'])->
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/faq', fn () => redirect('/support', 301))->name('faq');
+Route::get('/privacy', fn () => redirect('/privacy-policy', 301))->name('privacy');
 Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
 Route::get('/delete-account', [DeleteAccountController::class, 'show'])->name('delete-account');
 Route::post('/delete-account/otp', [DeleteAccountController::class, 'requestOtp'])->name('delete-account.otp');
@@ -41,7 +42,7 @@ Route::get('/login', fn () => redirect('/')->with('status', 'Book rides in the K
 Route::get('/register', fn () => redirect('/')->with('status', 'Create your account in the KarnaRide customer or driver app.'))->name('register');
 
 foreach (array_keys(config('karnacab_pages')) as $slug) {
-    if ($slug === 'home') {
+    if (in_array($slug, ['home', 'privacy'], true)) {
         continue;
     }
     Route::get('/'.$slug, [PageController::class, 'show'])->defaults('slug', $slug)->name($slug);

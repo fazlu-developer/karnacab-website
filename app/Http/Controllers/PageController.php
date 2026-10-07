@@ -18,7 +18,7 @@ class PageController extends Controller
 
     public function privacyPolicy(CmsService $cms): View|RedirectResponse
     {
-        return $this->show($cms, 'privacy');
+        return $this->show($cms, 'privacy-policy');
     }
 
     public function show(CmsService $cms, string $slug): View|RedirectResponse

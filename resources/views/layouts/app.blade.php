@@ -151,13 +151,12 @@
                     @forelse ($legalNav as $item)
                         <li><a href="{{ $item['path'] }}">{{ $item['label'] }}</a></li>
                     @empty
-                        <li><a href="{{ route('privacy') }}">Privacy</a></li>
-                        <li><a href="{{ route('terms') }}">Terms</a></li>
+                        <li><a href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
+                        <li><a href="{{ route('terms') }}">Terms &amp; Conditions</a></li>
+                        <li><a href="{{ url('/return-refund') }}">Cancellation &amp; Refund</a></li>
+                        <li><a href="{{ url('/software-license') }}">Software License</a></li>
                     @endforelse
-                    <li><a href="{{ url('/privacy-policy') }}">Privacy Policy</a></li>
                     <li><a href="{{ route('delete-account') }}">Delete Account</a></li>
-                    <li><a href="{{ route('download') }}">Get the apps</a></li>
-                    <li><a href="{{ config('karnacab.admin_url') }}/login" rel="noopener">Operator login</a></li>
                 </ul>
             </div>
         </div>

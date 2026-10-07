@@ -17,13 +17,19 @@ class SeoController extends Controller
         }
 
         $urls = [['loc' => $host.'/', 'priority' => '1.0']];
+        $seen = ['/' => true];
         foreach ($site['pages'] as $page) {
-            $slug = $page['slug'] ?? '';
-            if ($slug === '' || $slug === 'home') {
+            $slug = CmsService::canonicalSlug((string) ($page['slug'] ?? ''));
+            if ($slug === '' || $slug === 'home' || in_array($slug, ['about-us', 'terms-conditions'], true)) {
                 continue;
             }
+            $path = '/'.$slug;
+            if (isset($seen[$path])) {
+                continue;
+            }
+            $seen[$path] = true;
             $urls[] = [
-                'loc' => $host.'/'.$slug,
+                'loc' => $host.$path,
                 'priority' => '0.8',
             ];
         }

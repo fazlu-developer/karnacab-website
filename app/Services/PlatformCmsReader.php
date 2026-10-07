@@ -187,17 +187,42 @@ class PlatformCmsReader
     {
         $groups = ['primary', 'rides', 'services', 'company', 'legal'];
 
-        return array_map(function (string $group) use ($pages) {
-            $items = array_values(array_filter($pages, fn ($page) => ($page['navGroup'] ?? '') === $group && ($page['slug'] ?? '') !== 'home'));
+        $appOnly = ['about-us', 'terms-conditions'];
+
+        return array_map(function (string $group) use ($pages, $appOnly) {
+            $items = array_values(array_filter($pages, function ($page) use ($group, $appOnly) {
+                $slug = (string) ($page['slug'] ?? '');
+
+                return ($page['navGroup'] ?? '') === $group
+                    && $slug !== 'home'
+                    && ! in_array($slug, $appOnly, true);
+            }));
             usort($items, fn ($a, $b) => ($a['sortOrder'] ?? 0) <=> ($b['sortOrder'] ?? 0));
+            $seen = [];
+            $unique = [];
+            foreach ($items as $page) {
+                $canonical = CmsService::canonicalSlug((string) $page['slug']);
+                $label = strtolower(trim((string) ($page['navLabel'] ?: $page['title'])));
+                $key = $canonical.'|'.$label;
+                if (isset($seen[$key]) || isset($seen[$canonical])) {
+                    continue;
+                }
+                $seen[$key] = true;
+                $seen[$canonical] = true;
+                $unique[] = $page;
+            }
 
             return [
                 'group' => $group,
-                'items' => array_map(fn ($page) => [
-                    'slug' => $page['slug'],
-                    'path' => $page['path'],
-                    'label' => $page['navLabel'],
-                ], $items),
+                'items' => array_map(function ($page) {
+                    $canonical = CmsService::canonicalSlug((string) $page['slug']);
+
+                    return [
+                        'slug' => $canonical,
+                        'path' => $canonical === 'home' ? '/' : '/'.$canonical,
+                        'label' => $page['navLabel'] ?: $page['title'],
+                    ];
+                }, $unique),
             ];
         }, $groups);
     }

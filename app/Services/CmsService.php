@@ -49,12 +49,19 @@ class CmsService
         $found = null;
         foreach ($site['pages'] as $page) {
             $pageSlug = (string) ($page['slug'] ?? '');
-            if (in_array($pageSlug, [$slug, $canonical], true) || self::canonicalSlug($pageSlug) === $canonical) {
+            if (self::canonicalSlug($pageSlug) !== $canonical && $pageSlug !== $slug) {
+                continue;
+            }
+            if ($pageSlug === $canonical || $found === null) {
                 $found = $page;
+            }
+            if ($pageSlug === $canonical) {
                 break;
             }
         }
-        $config = config('karnacab_pages.'.$canonical) ?? config('karnacab_pages.'.$slug);
+        $config = config('karnacab_pages.'.$canonical)
+            ?? config('karnacab_pages.'.$slug)
+            ?? config('karnacab_pages.'.self::configSlug($canonical));
         if (is_array($config)) {
             $cmsBody = $found['body'] ?? null;
             $configBody = $config['body'] ?? ['sections' => []];
@@ -87,9 +94,17 @@ class CmsService
     public static function canonicalSlug(string $slug): string
     {
         return match ($slug) {
-            'privacy-policy' => 'privacy',
+            'privacy', 'privacy-policy' => 'privacy-policy',
             'terms-conditions' => 'terms',
             'about-us' => 'about',
+            default => $slug,
+        };
+    }
+
+    public static function configSlug(string $slug): string
+    {
+        return match ($slug) {
+            'privacy-policy' => 'privacy',
             default => $slug,
         };
     }
