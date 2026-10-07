@@ -152,7 +152,7 @@
                         <li><a href="{{ $item['path'] }}">{{ $item['label'] }}</a></li>
                     @empty
                         <li><a href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
-                        <li><a href="{{ route('terms') }}">Terms &amp; Conditions</a></li>
+                        <li><a href="{{ route('terms-conditions') }}">Terms &amp; Conditions</a></li>
                         <li><a href="{{ url('/return-refund') }}">Cancellation &amp; Refund</a></li>
                         <li><a href="{{ url('/software-license') }}">Software License</a></li>
                     @endforelse

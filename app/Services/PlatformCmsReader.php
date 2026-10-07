@@ -187,7 +187,7 @@ class PlatformCmsReader
     {
         $groups = ['primary', 'rides', 'services', 'company', 'legal'];
 
-        $appOnly = ['about-us', 'terms-conditions'];
+        $appOnly = ['about-us'];
 
         return array_map(function (string $group) use ($pages, $appOnly) {
             $items = array_values(array_filter($pages, function ($page) use ($group, $appOnly) {
@@ -220,7 +220,7 @@ class PlatformCmsReader
                     return [
                         'slug' => $canonical,
                         'path' => $canonical === 'home' ? '/' : '/'.$canonical,
-                        'label' => $page['navLabel'] ?: $page['title'],
+                        'label' => CmsService::publicNavLabel($canonical, (string) ($page['title'] ?: $page['navLabel'])),
                     ];
                 }, $unique),
             ];

@@ -322,7 +322,7 @@ return [
         'lede' => 'Cancellation windows and how qualified refunds are paid.',
         'template' => 'legal',
         'nav_group' => 'legal',
-        'nav_label' => 'Refunds',
+        'nav_label' => 'Cancellation & Refund',
         'body' => [
             'html' => $karnarideLegal('return-refund'),
         ],
@@ -353,7 +353,7 @@ return [
         'lede' => 'Binding terms for the KarnaRide website and customer app.',
         'template' => 'legal',
         'nav_group' => 'legal',
-        'nav_label' => 'Terms',
+        'nav_label' => 'Terms & Conditions',
         'body' => [
             'html' => $karnarideLegal('terms'),
         ],
@@ -364,7 +364,7 @@ return [
         'lede' => 'How KarnaRide collects, uses, shares and protects your information, including location.',
         'template' => 'legal',
         'nav_group' => 'legal',
-        'nav_label' => 'Privacy',
+        'nav_label' => 'Privacy Policy',
         'body' => [
             'html' => $karnarideLegal('privacy-policy'),
         ],

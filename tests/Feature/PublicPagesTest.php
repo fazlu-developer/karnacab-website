@@ -40,8 +40,8 @@ class PublicPagesTest extends TestCase
             '/drive',
             '/support',
             '/privacy-policy',
+            '/terms-conditions',
             '/delete-account',
-            '/terms',
             '/return-refund',
             '/software-license',
             '/contact',
@@ -149,7 +149,8 @@ class PublicPagesTest extends TestCase
             ->assertOk()
             ->assertSee('Delete Account')
             ->assertSee('Permanently delete my account');
-        $this->get('/terms')
+        $this->get('/terms')->assertRedirect('/terms-conditions');
+        $this->get('/terms-conditions')
             ->assertOk()
             ->assertSee('Terms of Use')
             ->assertSee('Saharsa');
@@ -162,8 +163,10 @@ class PublicPagesTest extends TestCase
     public function test_footer_legal_does_not_repeat_cms_pages(): void
     {
         $html = $this->get('/')->assertOk()->getContent();
-        $this->assertSame(1, substr_count($html, '>Privacy</a>') + substr_count($html, '>Privacy Policy</a>'), $html);
-        $this->assertSame(1, substr_count($html, '>Terms</a>') + substr_count($html, '>Terms &amp; Conditions</a>'));
+        $this->assertSame(1, substr_count($html, '>Privacy Policy</a>'));
+        $this->assertSame(1, substr_count($html, '>Terms &amp; Conditions</a>'));
+        $this->assertStringContainsString('/privacy-policy', $html);
+        $this->assertStringContainsString('/terms-conditions', $html);
         $this->assertStringNotContainsString('Operator login', $html);
     }
 

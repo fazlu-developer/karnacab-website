@@ -20,7 +20,7 @@ class SeoController extends Controller
         $seen = ['/' => true];
         foreach ($site['pages'] as $page) {
             $slug = CmsService::canonicalSlug((string) ($page['slug'] ?? ''));
-            if ($slug === '' || $slug === 'home' || in_array($slug, ['about-us', 'terms-conditions'], true)) {
+            if ($slug === '' || $slug === 'home' || $slug === 'about-us') {
                 continue;
             }
             $path = '/'.$slug;

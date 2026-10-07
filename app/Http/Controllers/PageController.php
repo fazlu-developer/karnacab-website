@@ -21,6 +21,11 @@ class PageController extends Controller
         return $this->show($cms, 'privacy-policy');
     }
 
+    public function terms(CmsService $cms): View|RedirectResponse
+    {
+        return $this->show($cms, 'terms-conditions');
+    }
+
     public function show(CmsService $cms, string $slug): View|RedirectResponse
     {
         if ($slug === 'faq') {

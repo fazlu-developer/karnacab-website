@@ -95,7 +95,7 @@ class CmsService
     {
         return match ($slug) {
             'privacy', 'privacy-policy' => 'privacy-policy',
-            'terms-conditions' => 'terms',
+            'terms', 'terms-conditions' => 'terms-conditions',
             'about-us' => 'about',
             default => $slug,
         };
@@ -105,7 +105,20 @@ class CmsService
     {
         return match ($slug) {
             'privacy-policy' => 'privacy',
+            'terms-conditions' => 'terms',
             default => $slug,
+        };
+    }
+
+    public static function publicNavLabel(string $canonical, string $fallback = ''): string
+    {
+        return match ($canonical) {
+            'privacy-policy' => 'Privacy Policy',
+            'terms-conditions' => 'Terms & Conditions',
+            'return-refund' => 'Cancellation & Refund',
+            'software-license' => 'Software License',
+            'about' => 'About Us',
+            default => $fallback,
         };
     }
 

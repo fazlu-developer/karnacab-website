@@ -34,7 +34,8 @@ Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])->name('p
 Route::get('/delete-account', [DeleteAccountController::class, 'show'])->name('delete-account');
 Route::post('/delete-account/otp', [DeleteAccountController::class, 'requestOtp'])->name('delete-account.otp');
 Route::post('/delete-account', [DeleteAccountController::class, 'destroy'])->name('delete-account.destroy');
-Route::get('/terms-conditions', fn () => redirect('/terms', 301));
+Route::get('/terms', fn () => redirect('/terms-conditions', 301))->name('terms');
+Route::get('/terms-conditions', [PageController::class, 'terms'])->name('terms-conditions');
 Route::get('/about-us', fn () => redirect('/about', 301));
 Route::get('/drive-with-us', fn () => redirect('/drive', 301));
 Route::get('/advertise-with-us', fn () => redirect('/advertise', 301));
@@ -42,7 +43,7 @@ Route::get('/login', fn () => redirect('/')->with('status', 'Book rides in the K
 Route::get('/register', fn () => redirect('/')->with('status', 'Create your account in the KarnaRide customer or driver app.'))->name('register');
 
 foreach (array_keys(config('karnacab_pages')) as $slug) {
-    if (in_array($slug, ['home', 'privacy'], true)) {
+    if (in_array($slug, ['home', 'privacy', 'terms'], true)) {
         continue;
     }
     Route::get('/'.$slug, [PageController::class, 'show'])->defaults('slug', $slug)->name($slug);
