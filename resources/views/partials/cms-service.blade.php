@@ -7,6 +7,12 @@
     <div class="wrap contact-layout">
         <section class="card">
             @include('partials.cms-sections')
+            @php
+                $html = $page['bodyHtml'] ?? ($page['body']['html'] ?? $page['body']['text'] ?? '');
+            @endphp
+            @if (is_string($html) && trim($html) !== '')
+                <div class="legal-copy">{!! nl2br(e($html)) !!}</div>
+            @endif
             @if (($page['productKey'] ?? null) === 'RENTAL' && count($rentals))
                 <h2>Rental packages</h2>
                 <p class="muted">Hours and included KM from fare rules.</p>

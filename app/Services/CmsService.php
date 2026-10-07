@@ -44,33 +44,103 @@ class CmsService
 
     public function page(string $slug): ?array
     {
+        $canonical = self::canonicalSlug($slug);
         $site = $this->site();
         $found = null;
         foreach ($site['pages'] as $page) {
-            if (($page['slug'] ?? '') === $slug) {
+            $pageSlug = (string) ($page['slug'] ?? '');
+            if (in_array($pageSlug, [$slug, $canonical], true) || self::canonicalSlug($pageSlug) === $canonical) {
                 $found = $page;
                 break;
             }
         }
-        $config = config('karnacab_pages.'.$slug);
+        $config = config('karnacab_pages.'.$canonical) ?? config('karnacab_pages.'.$slug);
         if (is_array($config)) {
+            $cmsBody = $found['body'] ?? null;
+            $configBody = $config['body'] ?? ['sections' => []];
             $found = array_merge($found ?? [
-                'slug' => $slug,
-                'path' => '/'.$slug,
+                'slug' => $canonical,
+                'path' => '/'.$canonical,
                 'template' => $config['template'] ?? 'legal',
             ], [
-                'slug' => $slug,
-                'title' => $config['title'] ?? ($found['title'] ?? $slug),
-                'eyebrow' => $config['eyebrow'] ?? ($found['eyebrow'] ?? ''),
-                'lede' => $config['lede'] ?? ($found['lede'] ?? ''),
-                'seoTitle' => ($config['title'] ?? 'KarnaRide').' | KarnaRide',
-                'seoDescription' => $config['lede'] ?? '',
-                'template' => $config['template'] ?? ($found['template'] ?? 'legal'),
-                'body' => $config['body'] ?? ($found['body'] ?? ['sections' => []]),
+                'slug' => $canonical,
+                'path' => $canonical === 'home' ? '/' : '/'.$canonical,
+                'title' => $found['title'] ?? $config['title'] ?? $canonical,
+                'eyebrow' => $found['eyebrow'] ?? $config['eyebrow'] ?? '',
+                'lede' => $found['lede'] ?? $config['lede'] ?? '',
+                'seoTitle' => $found['seoTitle'] ?? (($found['title'] ?? $config['title'] ?? 'KarnaRide').' | KarnaRide'),
+                'seoDescription' => $found['seoDescription'] ?? ($found['lede'] ?? $config['lede'] ?? ''),
+                'template' => $found['template'] ?? $config['template'] ?? 'legal',
+                'body' => $this->bodyHasContent($cmsBody) ? $cmsBody : $configBody,
+                'bodyHtml' => $found['bodyHtml'] ?? $this->bodyHtml($this->bodyHasContent($cmsBody) ? $cmsBody : $configBody),
+                'leadType' => $found['leadType'] ?? $config['lead_type'] ?? null,
+                'registerKind' => $found['registerKind'] ?? $config['register_kind'] ?? null,
+                'productKey' => $found['productKey'] ?? $config['product_key'] ?? null,
             ]);
+        } elseif ($found !== null) {
+            $found['bodyHtml'] = $found['bodyHtml'] ?? $this->bodyHtml($found['body'] ?? null);
         }
 
         return $found;
+    }
+
+    public static function canonicalSlug(string $slug): string
+    {
+        return match ($slug) {
+            'privacy-policy' => 'privacy',
+            'terms-conditions' => 'terms',
+            'about-us' => 'about',
+            default => $slug,
+        };
+    }
+
+    private function bodyHasContent(mixed $body): bool
+    {
+        if (is_string($body)) {
+            return trim($body) !== '';
+        }
+        if (! is_array($body)) {
+            return false;
+        }
+        if (trim((string) ($body['html'] ?? $body['text'] ?? '')) !== '') {
+            return true;
+        }
+
+        return ! empty($body['sections']);
+    }
+
+    private function bodyHtml(mixed $body): string
+    {
+        if (is_string($body)) {
+            $decoded = json_decode($body, true);
+            $body = is_array($decoded) ? $decoded : $body;
+        }
+        if (is_string($body)) {
+            return $body;
+        }
+        if (! is_array($body)) {
+            return '';
+        }
+        if (! empty($body['html']) || ! empty($body['text'])) {
+            return (string) ($body['html'] ?? $body['text']);
+        }
+        $parts = [];
+        foreach ($body['sections'] ?? [] as $section) {
+            if (! is_array($section)) {
+                continue;
+            }
+            if (! empty($section['heading'])) {
+                $parts[] = $section['heading'];
+            }
+            if (! empty($section['text'])) {
+                $parts[] = $section['text'];
+            }
+            foreach ($section['paragraphs'] ?? [] as $paragraph) {
+                $parts[] = (string) $paragraph;
+            }
+        }
+
+        return trim(implode("\n\n", array_filter($parts)));
     }
 
     public function home(): array
@@ -204,9 +274,12 @@ class CmsService
                 'footerBlurb' => 'Rides, parcel, travel, bulk and corporate.',
                 'contactEmail' => '',
                 'contactPhone' => '',
-                'canonicalHost' => '',
-                'defaultSeoTitle' => 'KarnaRide',
-                'defaultSeoDescription' => 'KarnaRide public website',
+                'canonicalHost' => 'https://karnaride.in',
+                'defaultSeoTitle' => 'KarnaRide — rides, parcel and travel',
+                'defaultSeoDescription' => 'Book bike, auto, cab, parcel and travel with KarnaRide in Bihar and Delhi.',
+                'contactEmail' => 'karnaride@gmail.com',
+                'contactPhone' => '+91 1169 270 608',
+                'faviconUrl' => asset('favicon-32.png'),
                 'ogImage' => '',
             ],
             'promo' => [],

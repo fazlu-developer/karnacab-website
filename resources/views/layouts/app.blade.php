@@ -6,30 +6,37 @@
     $servicesNav = $nav->firstWhere('group', 'services')['items'] ?? [];
     $companyNav = $nav->firstWhere('group', 'company')['items'] ?? [];
     $legalNav = $nav->firstWhere('group', 'legal')['items'] ?? [];
-    $seoTitle = trim($__env->yieldContent('title', $site['defaultSeoTitle'] ?? 'KarnaRide'));
-    $seoDescription = trim($__env->yieldContent('meta', $site['defaultSeoDescription'] ?? 'KarnaRide'));
-    $canonical = $site['canonicalHost'] ? rtrim($site['canonicalHost'], '/').request()->getPathInfo() : url()->current();
+    $brandName = $site['name'] ?? 'KarnaRide';
+    $seoTitle = trim(html_entity_decode($__env->yieldContent('title', $site['defaultSeoTitle'] ?? 'KarnaRide — rides, parcel and travel'), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    $seoDescription = trim(html_entity_decode($__env->yieldContent('meta', $site['defaultSeoDescription'] ?? 'KarnaRide rides, parcel and travel in Bihar.'), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    $canonicalHost = rtrim((string) ($site['canonicalHost'] ?? 'https://karnaride.in'), '/');
+    $canonical = $canonicalHost !== '' ? $canonicalHost.request()->getPathInfo() : url()->current();
+    $favicon = $site['faviconUrl'] ?: asset('favicon-32.png');
+    $ogImage = $site['ogImage'] ?: ($site['logoUrl'] ?: $favicon);
 @endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1B3A2F">
+    <meta name="application-name" content="{{ $brandName }}">
     <meta name="description" content="{{ $seoDescription }}">
     <link rel="canonical" href="{{ $canonical }}">
+    <meta property="og:site_name" content="{{ $brandName }}">
     <meta property="og:title" content="{{ $seoTitle }}">
     <meta property="og:description" content="{{ $seoDescription }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ $canonical }}">
-    @if (!empty($site['ogImage']))
-        <meta property="og:image" content="{{ $site['ogImage'] }}">
-    @else
-        <meta property="og:image" content="{{ asset('branding/karnacab-wordmark.png') }}">
-    @endif
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $seoTitle }}">
+    <meta name="twitter:description" content="{{ $seoDescription }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
     <title>{{ $seoTitle }}</title>
     <link rel="icon" href="{{ $site['faviconUrl'] ?: asset('favicon.ico') }}" sizes="any">
-    <link rel="icon" type="image/png" href="{{ $site['faviconUrl'] ?: asset('favicon-32.png') }}">
-    <link rel="apple-touch-icon" href="{{ $site['faviconUrl'] ?: asset('apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ $favicon }}">
+    <link rel="apple-touch-icon" href="{{ $favicon }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -38,8 +45,10 @@
         $jsonLd = [
             '@'.'context' => 'https://schema.org',
             '@'.'type' => 'Organization',
-            'name' => $site['name'] ?? 'KarnaRide',
-            'url' => url('/'),
+            'name' => $brandName,
+            'url' => $canonicalHost !== '' ? $canonicalHost : url('/'),
+            'logo' => $site['logoUrl'] ?: $favicon,
+            'image' => $ogImage,
             'description' => $site['defaultSeoDescription'] ?? '',
             'email' => ! empty($site['contactEmail']) ? $site['contactEmail'] : null,
             'telephone' => ! empty($site['contactPhone']) ? $site['contactPhone'] : null,
@@ -145,6 +154,8 @@
                         <li><a href="{{ route('privacy') }}">Privacy</a></li>
                         <li><a href="{{ route('terms') }}">Terms</a></li>
                     @endforelse
+                    <li><a href="{{ url('/privacy-policy') }}">Privacy Policy</a></li>
+                    <li><a href="{{ route('delete-account') }}">Delete Account</a></li>
                     <li><a href="{{ route('download') }}">Get the apps</a></li>
                     <li><a href="{{ config('karnacab.admin_url') }}/login" rel="noopener">Operator login</a></li>
                 </ul>

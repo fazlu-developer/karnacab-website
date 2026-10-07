@@ -65,6 +65,25 @@ class NestApiClient
         return $response->json() ?? [];
     }
 
+    public function requestOtp(string $phone): array
+    {
+        $response = $this->request('post', '/auth/otp/request', ['phone' => $phone]);
+        $response->throw();
+
+        return $response->json() ?? [];
+    }
+
+    public function deleteCustomerAccount(string $phone, string $code): array
+    {
+        $response = $this->request('post', '/auth/account/delete', [
+            'phone' => $phone,
+            'code' => $code,
+        ]);
+        $response->throw();
+
+        return $response->json() ?? [];
+    }
+
     public function request(string $method, string $path, array $payload = []): Response
     {
         $url = $this->baseUrl.'/'.ltrim($path, '/');

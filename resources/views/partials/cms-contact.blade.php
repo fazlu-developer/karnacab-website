@@ -1,7 +1,7 @@
 <section class="section">
     <div class="wrap contact-layout">
         <section class="card">
-            @include('partials.cms-sections')
+            @include('partials.cms-legal')
             <form method="POST" action="{{ route('contact.store') }}">
                 @csrf
                 <label for="name">Name</label>
@@ -27,9 +27,11 @@
             </form>
         </section>
         <aside class="tile">
-            <h3>Also useful</h3>
-            <p class="muted"><a href="{{ route('support') }}">Support FAQs</a> · <a href="{{ route('route') }}">Get route</a></p>
-            <p class="muted">Questions: <a href="{{ route('support') }}">Support FAQs</a> · <a href="{{ route('download') }}">Get the apps</a></p>
+            <h3>KarnaRide office</h3>
+            <p class="muted">KARNACAB TRANSPORT SERVICE PRIVATE LIMITED<br>Ward no. 6/41, C/O Baleshwar Prasad, Refugee Colony, Kahara, Saharsa, Bihar 852202</p>
+            <p class="muted">Toll-free: <a href="tel:+911169270608">+91 1169 270 608</a><br>Support: <a href="tel:9523707084">95237 07084</a><br>Drivers: <a href="tel:9296343483">92963 43483</a></p>
+            <p class="muted"><a href="mailto:karnaride@gmail.com">karnaride@gmail.com</a><br><a href="mailto:Karnacabservice@gmail.com">Karnacabservice@gmail.com</a></p>
+            <p class="muted"><a href="{{ url('/privacy-policy') }}">Privacy Policy</a> · <a href="{{ route('delete-account') }}">Delete Account</a> · <a href="{{ route('support') }}">FAQs</a></p>
         </aside>
     </div>
 </section>

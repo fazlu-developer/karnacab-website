@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DeleteAccountController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PartnerRegisterController;
@@ -28,6 +29,12 @@ Route::post('/partners/register', [PartnerRegisterController::class, 'store'])->
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/faq', fn () => redirect('/support', 301))->name('faq');
+Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
+Route::get('/delete-account', [DeleteAccountController::class, 'show'])->name('delete-account');
+Route::post('/delete-account/otp', [DeleteAccountController::class, 'requestOtp'])->name('delete-account.otp');
+Route::post('/delete-account', [DeleteAccountController::class, 'destroy'])->name('delete-account.destroy');
+Route::get('/terms-conditions', fn () => redirect('/terms', 301));
+Route::get('/about-us', fn () => redirect('/about', 301));
 Route::get('/drive-with-us', fn () => redirect('/drive', 301));
 Route::get('/advertise-with-us', fn () => redirect('/advertise', 301));
 Route::get('/login', fn () => redirect('/')->with('status', 'Book rides in the KarnaRide customer app.'))->name('login');
@@ -39,3 +46,7 @@ foreach (array_keys(config('karnacab_pages')) as $slug) {
     }
     Route::get('/'.$slug, [PageController::class, 'show'])->defaults('slug', $slug)->name($slug);
 }
+
+Route::get('/{slug}', [PageController::class, 'show'])
+    ->where('slug', '[a-z0-9][a-z0-9\-]*')
+    ->name('cms.page');

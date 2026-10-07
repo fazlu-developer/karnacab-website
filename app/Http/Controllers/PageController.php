@@ -16,6 +16,11 @@ class PageController extends Controller
         ]);
     }
 
+    public function privacyPolicy(CmsService $cms): View|RedirectResponse
+    {
+        return $this->show($cms, 'privacy');
+    }
+
     public function show(CmsService $cms, string $slug): View|RedirectResponse
     {
         if ($slug === 'faq') {

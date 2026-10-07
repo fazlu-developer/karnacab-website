@@ -11,6 +11,9 @@
     ])
 
     @php $template = $page['template'] ?? 'service'; @endphp
+    @if (in_array($template, ['app_legal', 'legal', 'cms'], true))
+        @php $template = 'legal'; @endphp
+    @endif
 
     @if ($template === 'rides')
         @include('partials.cms-rides')

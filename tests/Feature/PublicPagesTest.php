@@ -15,6 +15,8 @@ class PublicPagesTest extends TestCase
         Http::fake([
             '*/cms/site' => Http::response(['pages' => []], 200),
             '*/leads' => Http::response(['id' => '1', 'status' => 'NEW', 'type' => 'SUPPORT'], 200),
+            '*/auth/otp/request' => Http::response(['ok' => true, 'expiresInSeconds' => 300], 200),
+            '*/auth/account/delete' => Http::response(['ok' => true, 'deleted' => true], 200),
             'http://127.0.0.1:8001/api/v1/*' => Http::response([
                 'products' => [['key' => 'LOCAL_CAB', 'title' => 'Local Cab']],
                 'vehicles' => [['key' => 'SEDAN', 'title' => 'Sedan']],
@@ -38,7 +40,11 @@ class PublicPagesTest extends TestCase
             '/drive',
             '/support',
             '/privacy',
+            '/privacy-policy',
+            '/delete-account',
             '/terms',
+            '/return-refund',
+            '/software-license',
             '/contact',
             '/corporate',
             '/business',
@@ -127,7 +133,34 @@ class PublicPagesTest extends TestCase
         $this->get('/about')
             ->assertOk()
             ->assertSee('What is KarnaRide')
-            ->assertSee('app-first taxi');
+            ->assertSee('app-first taxi')
+            ->assertSee('KARNACAB TRANSPORT SERVICE PRIVATE LIMITED');
+    }
+
+    public function test_privacy_policy_renders_copy(): void
+    {
+        $this->get('/privacy')
+            ->assertOk()
+            ->assertSee('Privacy Policy')
+            ->assertSee('do not sell personal data')
+            ->assertSee('precise location')
+            ->assertSee('LOCATION DATA WE ACCESS');
+        $this->get('/privacy-policy')
+            ->assertOk()
+            ->assertSee('Privacy Policy')
+            ->assertSee('LOCATION DATA WE ACCESS');
+        $this->get('/delete-account')
+            ->assertOk()
+            ->assertSee('Delete Account')
+            ->assertSee('Permanently delete my account');
+        $this->get('/terms')
+            ->assertOk()
+            ->assertSee('Terms of Use')
+            ->assertSee('Saharsa');
+        $this->get('/return-refund')
+            ->assertOk()
+            ->assertSee('Cancellation')
+            ->assertSee('2–3 business days');
     }
 
     public function test_faq_redirects_to_support(): void

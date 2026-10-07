@@ -107,6 +107,21 @@ class PlatformCmsReader
         if (! is_array($body)) {
             $body = ['sections' => []];
         }
+        $html = (string) ($body['html'] ?? $body['text'] ?? '');
+        if ($html === '' && ! empty($body['sections']) && is_array($body['sections'])) {
+            $chunks = [];
+            foreach ($body['sections'] as $section) {
+                if (! is_array($section)) {
+                    continue;
+                }
+                $chunks[] = trim((string) ($section['heading'] ?? ''));
+                $chunks[] = trim((string) ($section['text'] ?? ''));
+                foreach ($section['paragraphs'] ?? [] as $paragraph) {
+                    $chunks[] = trim((string) $paragraph);
+                }
+            }
+            $html = trim(implode("\n\n", array_filter($chunks)));
+        }
 
         return [
             'id' => (string) $row->id,
@@ -118,6 +133,7 @@ class PlatformCmsReader
             'seoDescription' => $row->seo_description ?: $row->lede,
             'lede' => $row->lede,
             'body' => $body,
+            'bodyHtml' => $html,
             'template' => $row->template,
             'leadType' => $row->lead_type,
             'registerKind' => $row->register_kind,

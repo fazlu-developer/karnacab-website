@@ -1,5 +1,12 @@
 <?php
 
+$karnarideLegal = static function (string $stem): string {
+    $path = dirname(__DIR__, 2).DIRECTORY_SEPARATOR.'legal'.DIRECTORY_SEPARATOR.$stem.'.php';
+    $text = is_file($path) ? require $path : '';
+
+    return is_string($text) ? $text : '';
+};
+
 return [
     'home' => [
         'title' => 'Ride when you need to go',
@@ -20,32 +27,12 @@ return [
     'about' => [
         'title' => 'About KarnaRide',
         'eyebrow' => 'What is KarnaRide',
-        'lede' => 'KarnaRide is a mobility company for Bihar and Delhi: rides, parcel, travel packages, bulk booking and corporate transport on one platform.',
+        'lede' => 'KARNACAB TRANSPORT SERVICE PRIVATE LIMITED, consumer brand KarnaRide — cab, parcel and logistics from Saharsa, Bihar.',
         'template' => 'legal',
         'nav_group' => 'company',
         'nav_label' => 'About',
         'body' => [
-            'sections' => [
-                [
-                    'heading' => 'The short answer',
-                    'paragraphs' => [
-                        'KarnaRide is an app-first taxi and delivery network. Customers request bike, auto, mini, sedan, SUV or traveller trips. Captains accept those trips after KYC. District teams, franchises and fleet owners run the ground network from the operator console.',
-                        'This website is for reading, fare checks and partner enquiries. Live booking, OTP login, driver matching, tracking, wallet and invoices happen in the customer and driver apps.',
-                    ],
-                ],
-                [
-                    'heading' => 'What you can do',
-                    'paragraphs' => [
-                        'Riders: check pickup to destination, compare vehicle fares, then download the customer app to book.',
-                        'Captains: apply to drive, complete documents, go online in a live district and earn.',
-                        'Businesses: enquire for corporate billing, bulk vehicles, travel packages or local advertising.',
-                    ],
-                ],
-                [
-                    'heading' => 'Where we operate',
-                    'text' => 'KarnaRide is live in Bihar and Delhi. Other states see Coming soon in the apps until that city opens. Fares follow admin fare rules for each product and vehicle, not a number printed on a flyer.',
-                ],
-            ],
+            'html' => $karnarideLegal('about'),
         ],
     ],
     'how-it-works' => [
@@ -308,7 +295,7 @@ return [
             'sections' => [
                 [
                     'heading' => 'Who logs in where',
-                    'text' => 'Customers book from the website or app. Captains use the driver app. Fleet owners, franchise, district and state teams use the operator console at admin.karnacab.in.',
+                    'text' => 'Customers book from the website or app. Captains use the driver app. Fleet owners, franchise, district and state teams use the operator console at admin.karnaride.in.',
                 ],
                 [
                     'heading' => 'Territory rules',
@@ -320,11 +307,36 @@ return [
     'contact' => [
         'title' => 'Contact',
         'eyebrow' => 'Hello',
-        'lede' => 'Send a support request. Stored as a lead in the KarnaRide API.',
+        'lede' => 'Office, phone and email for KarnaRide. You can also send a support request below.',
         'lead_type' => 'SUPPORT',
         'template' => 'contact',
         'nav_group' => 'primary',
         'nav_label' => 'Contact',
+        'body' => [
+            'html' => $karnarideLegal('contact'),
+        ],
+    ],
+    'return-refund' => [
+        'title' => 'Cancellation & Refund',
+        'eyebrow' => 'Legal',
+        'lede' => 'Cancellation windows and how qualified refunds are paid.',
+        'template' => 'legal',
+        'nav_group' => 'legal',
+        'nav_label' => 'Refunds',
+        'body' => [
+            'html' => $karnarideLegal('return-refund'),
+        ],
+    ],
+    'software-license' => [
+        'title' => 'Software License',
+        'eyebrow' => 'Legal',
+        'lede' => 'Licence to use the KarnaRide customer application.',
+        'template' => 'legal',
+        'nav_group' => 'legal',
+        'nav_label' => 'Software License',
+        'body' => [
+            'html' => $karnarideLegal('software-license'),
+        ],
     ],
     'support' => [
         'title' => 'Support',
@@ -338,17 +350,23 @@ return [
     'terms' => [
         'title' => 'Terms & Conditions',
         'eyebrow' => 'Legal',
-        'lede' => 'Terms for the public website, quotes and partner applications.',
+        'lede' => 'Binding terms for the KarnaRide website and customer app.',
         'template' => 'legal',
         'nav_group' => 'legal',
         'nav_label' => 'Terms',
+        'body' => [
+            'html' => $karnarideLegal('terms'),
+        ],
     ],
     'privacy' => [
         'title' => 'Privacy Policy',
         'eyebrow' => 'Legal',
-        'lede' => 'How the public website handles the information you type.',
+        'lede' => 'How KarnaRide collects, uses, shares and protects your information, including location.',
         'template' => 'legal',
         'nav_group' => 'legal',
         'nav_label' => 'Privacy',
+        'body' => [
+            'html' => $karnarideLegal('privacy-policy'),
+        ],
     ],
 ];
