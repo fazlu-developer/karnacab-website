@@ -16,7 +16,7 @@ return [
         'osrm_url' => rtrim((string) env('OSRM_URL', 'https://router.project-osrm.org'), '/'),
         'timeout' => (int) env('MAPS_TIMEOUT', 8),
     ],
-    'admin_url' => rtrim((string) env('ADMIN_PUBLIC_URL', 'https://admin.karnacab.in'), '/'),
+    'admin_url' => rtrim((string) env('ADMIN_PUBLIC_URL', 'https://admin.karnaride.in'), '/'),
     'apps' => [
         'customer' => (string) env('CUSTOMER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps'),
         'driver' => (string) env('DRIVER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps'),

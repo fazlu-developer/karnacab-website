@@ -23,7 +23,13 @@ class PlatformCmsReader
                 ? $db->table('cms_pages')->where('published', 1)->orderBy('sort_order')->get()
                 : collect();
             $settings = $this->hasTable($db, 'system_settings')
-                ? $db->table('system_settings')->whereIn('key', ['cms_site', 'cms_home_promo'])->pluck('value', 'key')
+                ? $db->table('system_settings')->whereIn('key', [
+                    'cms_site',
+                    'cms_home_promo',
+                    'driver_welcome_bonus_enabled',
+                    'driver_welcome_bonus_rupees',
+                    'customer_first_ride_free_enabled',
+                ])->pluck('value', 'key')
                 : collect();
             $districts = $this->hasTable($db, 'districts')
                 ? $db->table('districts')->orderBy('name')->get(['id', 'name', 'code'])
@@ -44,6 +50,13 @@ class PlatformCmsReader
             return [
                 'site' => $this->jsonSetting($settings['cms_site'] ?? null),
                 'promo' => $this->jsonSetting($settings['cms_home_promo'] ?? null),
+                'offers' => [
+                    'customerFirstRideFreeEnabled' => $this->flagOn($settings['customer_first_ride_free_enabled'] ?? null),
+                    'driverWelcomeBonusEnabled' => $this->flagOn($settings['driver_welcome_bonus_enabled'] ?? null),
+                    'driverWelcomeBonusRupees' => is_numeric($settings['driver_welcome_bonus_rupees'] ?? null)
+                        ? (int) $settings['driver_welcome_bonus_rupees']
+                        : 100,
+                ],
                 'pages' => $presentedPages,
                 'nav' => $this->navFrom($presentedPages),
                 'catalog' => [
@@ -181,5 +194,14 @@ class PlatformCmsReader
         $decoded = json_decode($raw, true);
 
         return is_array($decoded) ? $decoded : [];
+    }
+
+    private function flagOn(mixed $value): bool
+    {
+        if ($value === null || $value === '') {
+            return true;
+        }
+
+        return in_array(strtolower((string) $value), ['1', 'true', 'yes', 'on'], true);
     }
 }

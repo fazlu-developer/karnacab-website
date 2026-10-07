@@ -16,7 +16,12 @@ class CmsService
 
     public function site(): array
     {
-        $cached = Cache::get('karnacab.cms.site');
+        $cached = null;
+        try {
+            $cached = Cache::get('karnacab.cms.site');
+        } catch (Throwable) {
+            $cached = null;
+        }
         if (is_array($cached) && ! empty($cached['catalog']['rideTypes']) && ! empty($cached['site']['logoUrl'])) {
             return $cached;
         }
@@ -28,7 +33,10 @@ class CmsService
         $payload = $this->normalize($payload);
 
         if (! empty($payload['catalog']['rideTypes'])) {
-            Cache::put('karnacab.cms.site', $payload, 60);
+            try {
+                Cache::put('karnacab.cms.site', $payload, 60);
+            } catch (Throwable) {
+            }
         }
 
         return $payload;
@@ -123,6 +131,7 @@ class CmsService
         $payload['catalog'] = is_array($payload['catalog'] ?? null) ? $payload['catalog'] : [];
         $payload['faqs'] = is_array($payload['faqs'] ?? null) ? $payload['faqs'] : [];
         $payload['promo'] = is_array($payload['promo'] ?? null) ? $payload['promo'] : [];
+        $payload['offers'] = is_array($payload['offers'] ?? null) ? $payload['offers'] : [];
         foreach (['logoUrl', 'faviconUrl', 'ogImage', 'adminLogoUrl', 'customerAppLogoUrl', 'driverAppLogoUrl'] as $key) {
             $payload['site'][$key] = $this->publicAsset($payload['site'][$key] ?? '');
         }

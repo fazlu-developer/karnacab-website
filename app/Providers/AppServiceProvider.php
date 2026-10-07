@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Services\NestApiClient;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,10 +19,31 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        \Illuminate\Support\Facades\View::composer('layouts.app', function ($view) {
+        $this->preferFileStoresWhenDatabaseTablesMissing();
+
+        View::composer('layouts.app', function ($view) {
             if (! $view->offsetExists('cms')) {
                 $view->with('cms', app(\App\Services\CmsService::class)->site());
             }
         });
+    }
+
+    private function preferFileStoresWhenDatabaseTablesMissing(): void
+    {
+        try {
+            if (config('session.driver') === 'database' && ! Schema::hasTable((string) config('session.table', 'sessions'))) {
+                config(['session.driver' => 'file']);
+            }
+        } catch (Throwable) {
+            config(['session.driver' => 'file']);
+        }
+
+        try {
+            if (config('cache.default') === 'database' && ! Schema::hasTable('cache')) {
+                config(['cache.default' => 'file']);
+            }
+        } catch (Throwable) {
+            config(['cache.default' => 'file']);
+        }
     }
 }

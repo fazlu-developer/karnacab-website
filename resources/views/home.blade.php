@@ -13,6 +13,10 @@
         $sections = $page['body']['sections'] ?? [];
         $cta = collect($sections)->first(fn ($row) => !empty($row['ctaHref']));
         $how = collect($sections)->first(fn ($row) => !empty($row['steps']));
+        $offers = is_array($cms['offers'] ?? null) ? $cms['offers'] : [];
+        $firstRide = ($offers['customerFirstRideFreeEnabled'] ?? false);
+        $driverGift = ($offers['driverWelcomeBonusEnabled'] ?? true);
+        $driverGiftRupees = (int) ($offers['driverWelcomeBonusRupees'] ?? 100);
     @endphp
     <section class="hero">
         <div class="wrap hero-grid">
@@ -25,6 +29,12 @@
                     <a class="btn ghost" href="{{ route('download') }}">Get the apps</a>
                     <a class="btn ghost" href="{{ route('about') }}">What is KarnaRide</a>
                 </div>
+                @if ($firstRide || $driverGift)
+                    <p class="muted">
+                        @if ($firstRide) New riders: first ride free. @endif
+                        @if ($driverGift) New captains: ₹{{ number_format($driverGiftRupees) }} after KYC, vehicle check and first completed ride. @endif
+                    </p>
+                @endif
                 @if (!empty($promo['title']))
                     <p class="muted"><a href="{{ $promo['href'] ?? route('railway') }}">{{ $promo['title'] }} — {{ $promo['cta'] ?? 'Learn more' }}</a></p>
                 @endif
@@ -71,7 +81,32 @@
         </div>
     </section>
 
-    <section class="section alt" id="about-karnacab">
+    @if ($firstRide || $driverGift)
+    <section class="section" id="launch-offers">
+        <div class="wrap">
+            <div class="section-head">
+                <div class="eyebrow">KarnaRide offers</div>
+                <h2>Launch benefits you can use today.</h2>
+            </div>
+            <div class="grid-3">
+                @if ($firstRide)
+                    <article class="tile">
+                        <h3>First ride free</h3>
+                        <p class="muted">New customer registrations get their first completed ride at ₹0 when this offer is on in admin Ride Settings.</p>
+                    </article>
+                @endif
+                @if ($driverGift)
+                    <article class="tile">
+                        <h3>₹{{ number_format($driverGiftRupees) }} driver joining credit</h3>
+                        <p class="muted">Paid after KYC, vehicle verification, account approval and the first completed ride — not on registration.</p>
+                    </article>
+                @endif
+            </div>
+        </div>
+    </section>
+    @endif
+
+    <section class="section alt" id="about-karnaride">
         <div class="wrap">
             <div class="section-head">
                 <div class="eyebrow">What is KarnaRide</div>
