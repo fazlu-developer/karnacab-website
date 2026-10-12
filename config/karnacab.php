@@ -18,8 +18,8 @@ return [
     ],
     'admin_url' => rtrim((string) env('ADMIN_PUBLIC_URL', 'https://admin.karnaride.in'), '/'),
     'apps' => [
-        'customer' => (string) env('CUSTOMER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps'),
-        'driver' => (string) env('DRIVER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps'),
+        'customer' => (string) env('CUSTOMER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps/details?id=com.karnacabride'),
+        'driver' => (string) env('DRIVER_APP_DOWNLOAD_URL', 'https://play.google.com/store/apps/details?id=com.karnacabpartner'),
     ],
     'leads_notify_email' => (string) env('LEADS_NOTIFY_EMAIL', env('MAIL_FROM_ADDRESS', 'karnaride@gmail.com')),
     'default_catalog' => [
