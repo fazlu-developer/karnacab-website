@@ -93,10 +93,9 @@ class WebsiteBookingTest extends TestCase
 
         $this->get('/download')
             ->assertOk()
-            ->assertSee('Please download')
+            ->assertSee('Complete this booking')
             ->assertSee('Customer app')
-            ->assertSee('Driver app')
-            ->assertSee('Download customer app');
+            ->assertSee('Driver app');
     }
 
     public function test_route_check_lists_vehicle_prices(): void
@@ -104,6 +103,24 @@ class WebsiteBookingTest extends TestCase
         $this->get('/route?pickup=Patna+Junction&drop=Gandhi+Maidan&pickup_lat=25.6&pickup_lng=85.1&drop_lat=25.61&drop_lng=85.14')
             ->assertOk()
             ->assertSee('Vehicles and fares')
-            ->assertSee('Proceed to book');
+            ->assertSee('Book');
+    }
+
+    public function test_apk_download_links_serve_latest_files(): void
+    {
+        $dir = storage_path('app/apps');
+        if (! is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+        file_put_contents($dir.'/karnaride-customer-latest.apk', 'customer-apk');
+        file_put_contents($dir.'/karnaride-partner-latest.apk', 'driver-apk');
+
+        $this->get('/apps/customer.apk')->assertDownload('KarnaRide-Customer-latest.apk');
+        $this->get('/apps/driver.apk')->assertDownload('KarnaRide-Partner-latest.apk');
+
+        $this->get('/download')
+            ->assertOk()
+            ->assertSee(route('apps.customer'), false)
+            ->assertSee(route('apps.driver'), false);
     }
 }

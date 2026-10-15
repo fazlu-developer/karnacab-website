@@ -64,16 +64,16 @@ class RoutePreviewController extends Controller
         $result['from'] = $from;
         $result['to'] = $to;
 
+        $route = [];
         try {
             $route = $places->directions($from['lat'], $from['lng'], $to['lat'], $to['lng']);
         } catch (Throwable) {
-            $result['error'] = 'Places found, but the road route could not be loaded. Pins are shown on the map.';
-
-            return view('pages.route', $result);
+            $result['error'] = 'Road path could not be drawn. Vehicle fares still use pickup and drop.';
         }
 
         $result['distance_km'] = $route['distanceKm'] ?? null;
-        $result['duration_min'] = $route['durationMinutes'] ?? null;
+        $result['duration_min'] = $route['durationMinutes'] ?? $route['durationMin'] ?? null;
+        $result['geometry'] = $route['geometry'] ?? null;
         $quotes = $fares->quotes([
             'product' => 'LOCAL_CAB',
             'distanceKm' => $result['distance_km'],
@@ -85,6 +85,9 @@ class RoutePreviewController extends Controller
             'dropText' => $to['label'] ?? $drop,
         ]);
         $result['quotes'] = $quotes['vehicles'];
+        if (! empty($quotes['distanceKm']) && ! $result['distance_km']) {
+            $result['distance_km'] = $quotes['distanceKm'];
+        }
         if (! empty($quotes['comingSoon'])) {
             $result['error'] = $quotes['message'] ?? 'Coming soon in this state.';
         }

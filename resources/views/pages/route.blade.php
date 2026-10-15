@@ -10,7 +10,7 @@
     @include('partials.page-hero', [
         'eyebrow' => 'Pickup to drop',
         'title' => 'Get your route',
-        'lede' => 'Enter pickup and drop. Destination search is Google Places via Laravel.',
+        'lede' => 'Enter pickup and drop, then Get route. We list vehicles with estimated fares. Booking is completed in the KarnaRide app.',
     ])
 
     <section class="section">

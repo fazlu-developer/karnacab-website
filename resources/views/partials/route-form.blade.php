@@ -32,5 +32,5 @@
     @error('drop') <div class="error">{{ $message }}</div> @enderror
 
     <button class="btn wide" type="submit">Get route</button>
-    <p class="soon-note">We show vehicle fares after pickup and destination. Complete the trip in the customer app.</p>
+    <p class="soon-note">Enter drop, then Get route to see vehicles and prices. Booking finishes in the KarnaRide customer app.</p>
 </form>

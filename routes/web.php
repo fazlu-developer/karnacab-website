@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppDownloadController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DeleteAccountController;
@@ -19,6 +20,8 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/route', RoutePreviewController::class)->name('route');
 Route::get('/places/suggest', [PlacesProxyController::class, 'suggest'])->name('places.suggest');
 Route::get('/places/details', [PlacesProxyController::class, 'details'])->name('places.details');
+Route::get('/apps/customer.apk', [AppDownloadController::class, 'customer'])->name('apps.customer');
+Route::get('/apps/driver.apk', [AppDownloadController::class, 'driver'])->name('apps.driver');
 Route::get('/book', [BookController::class, 'show'])->name('book');
 Route::post('/book/quote', [BookController::class, 'quote'])->name('book.quote');
 Route::post('/book/continue', [BookController::class, 'continue'])->name('book.continue');

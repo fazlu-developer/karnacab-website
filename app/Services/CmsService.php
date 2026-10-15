@@ -234,7 +234,7 @@ class CmsService
             $payload['site'][$key] = $this->publicAsset($payload['site'][$key] ?? '');
         }
         if ($payload['site']['logoUrl'] === '') {
-            $payload['site']['logoUrl'] = asset('branding/karnacab-logo-full.png');
+            $payload['site']['logoUrl'] = asset('branding/karnaride-logo.png');
         }
         if ($payload['site']['faviconUrl'] === '') {
             $payload['site']['faviconUrl'] = asset('favicon-32.png');

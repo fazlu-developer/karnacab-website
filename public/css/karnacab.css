@@ -629,14 +629,12 @@ textarea:focus {
 }
 .app-card { text-align: center; }
 .app-card img {
-    width: 96px;
-    height: 96px;
-    object-fit: cover;
-    border-radius: 22px;
-    background: #fff;
+    width: 220px;
+    height: 72px;
+    object-fit: contain;
+    background: transparent;
     margin: 0 auto 12px;
     display: block;
-    box-shadow: 0 10px 30px rgba(12, 26, 20, .12);
 }
 
 @media (max-width: 960px) {

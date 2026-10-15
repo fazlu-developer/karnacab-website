@@ -51,7 +51,7 @@ class BookController extends Controller
 
         return redirect()->route('download', array_filter([
             'category' => $request->input('category'),
-        ]))->with('status', 'Please download the KarnaRide customer app to complete this booking.');
+        ]))->with('status', 'Complete this booking in the KarnaRide app. Download the latest customer APK below.');
     }
 
     /**
