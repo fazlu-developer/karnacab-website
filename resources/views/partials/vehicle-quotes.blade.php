@@ -2,9 +2,22 @@
     <div class="vehicle-quotes" id="vehicles">
         <h2>Vehicles and fares</h2>
         <p class="muted">Pick a vehicle to see the estimated fare. Booking is completed in the KarnaRide customer app.</p>
-        <div class="grid-3">
+        <div class="vehicle-grid">
             @foreach ($quotes as $row)
-                <article class="tile">
+                @php
+                    $vehicleKey = strtoupper((string) ($row['key'] ?? ''));
+                    $vehicleArt = [
+                        'BIKE' => 'bike.svg',
+                        'AUTO' => 'auto.svg',
+                        'E_RICKSHAW' => 'e-rickshaw.svg',
+                        'MINI' => 'mini.svg',
+                        'SEDAN' => 'sedan.svg',
+                        'SUV' => 'suv.svg',
+                        'TRAVELLER' => 'traveller.svg',
+                    ][$vehicleKey] ?? 'sedan.svg';
+                @endphp
+                <article class="tile vehicle-card">
+                    <img class="vehicle-art" src="{{ asset('images/vehicles/'.$vehicleArt) }}" alt="{{ $row['title'] ?? $row['key'] }}">
                     <h3>{{ $row['title'] ?? $row['key'] }}</h3>
                     @if (!empty($row['totalPaise']))
                         <p class="quote-price">₹{{ number_format(((int) $row['totalPaise']) / 100, 0) }}</p>

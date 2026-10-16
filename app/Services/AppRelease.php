@@ -10,6 +10,7 @@ final class AppRelease
     public static function customer(): ?array
     {
         return self::find('customer', [
+            'KarnaRide-user.apk',
             'karnaride-customer-latest.apk',
             'KarnaRide-Customer-latest.apk',
             'KarnaRide-Customer-1.1.11-arm64.apk',
@@ -22,6 +23,7 @@ final class AppRelease
     public static function driver(): ?array
     {
         return self::find('driver', [
+            'KarnaRide-driver.apk',
             'karnaride-partner-latest.apk',
             'KarnaRide-Partner-latest.apk',
             'KarnaRide-Partner-1.1.11-arm64.apk',
@@ -34,24 +36,32 @@ final class AppRelease
      */
     private static function find(string $audience, array $preferred, string $downloadName): ?array
     {
+        $candidates = [];
         foreach (self::directories() as $dir) {
             foreach ($preferred as $name) {
                 $path = $dir.DIRECTORY_SEPARATOR.$name;
                 if (is_file($path)) {
-                    return self::meta($path, $downloadName);
+                    $candidates[] = $path;
                 }
             }
             $pattern = $audience === 'driver'
                 ? $dir.DIRECTORY_SEPARATOR.'*Partner*.apk'
                 : $dir.DIRECTORY_SEPARATOR.'*Customer*.apk';
-            $matches = glob($pattern) ?: [];
-            usort($matches, fn ($a, $b) => filemtime($b) <=> filemtime($a));
-            if ($matches !== []) {
-                return self::meta($matches[0], $downloadName);
+            foreach (glob($pattern) ?: [] as $path) {
+                if (is_file($path)) {
+                    $candidates[] = $path;
+                }
             }
         }
+        $candidates = array_values(array_unique($candidates));
+        if ($candidates === []) {
+            return null;
+        }
+        $published = array_values(array_filter($candidates, fn (string $path) => filesize($path) > 1024));
+        $pool = $published !== [] ? $published : $candidates;
+        usort($pool, fn (string $a, string $b) => filemtime($b) <=> filemtime($a));
 
-        return null;
+        return self::meta($pool[0], $downloadName);
     }
 
     /**

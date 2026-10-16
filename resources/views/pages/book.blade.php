@@ -11,7 +11,7 @@
         'lede' => 'Enter pickup and destination. We show vehicle types with estimated prices. To book, download the customer app.',
     ])
     <section class="section">
-        <div class="wrap contact-layout">
+        <div class="wrap book-layout">
             <section class="card">
                 @error('quote') <div class="error">{{ $message }}</div> @enderror
 
@@ -57,10 +57,12 @@
 
                 @include('partials.vehicle-quotes', ['quotes' => $quotes ?? []])
             </section>
-            <aside class="tile">
-                <h3>Booking is in the app</h3>
-                <p class="muted">This website shows the route and fare list. OTP, driver matching, live tracking and payment stay in the customer app.</p>
-                @include('partials.app-download', ['heading' => 'Download to book', 'lede' => 'Please download the customer app to continue.'])
+            <aside class="book-aside">
+                @include('partials.app-download', [
+                    'heading' => 'Download to book',
+                    'lede' => 'Please download the customer app to continue. OTP, driver matching and payment stay in the app.',
+                    'compact' => true,
+                ])
             </aside>
         </div>
     </section>

@@ -7,7 +7,7 @@
     $customerLogo = asset('branding/karnaride-logo.png');
     $driverLogo = asset('branding/karnaride-partner-logo.png');
 @endphp
-<section class="app-download" id="apps">
+<section class="app-download {{ !empty($compact) ? 'is-compact' : '' }}" id="apps">
     <div class="section-head">
         <div class="eyebrow">Get the apps</div>
         <h2>{{ $heading ?? 'Book and drive with KarnaRide' }}</h2>

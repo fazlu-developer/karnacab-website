@@ -27,7 +27,6 @@
                         <div><strong>{{ ucfirst($vehicle) }}</strong><span class="muted">Preferred</span></div>
                     </div>
                 @endif
-                @include('partials.vehicle-quotes', ['quotes' => $quotes ?? []])
             </div>
             <div
                 id="route-map"
@@ -36,6 +35,9 @@
                 data-to='@json($to)'
                 data-geometry='@json($geometry)'
             ></div>
+        </div>
+        <div class="wrap">
+            @include('partials.vehicle-quotes', ['quotes' => $quotes ?? []])
         </div>
         @if ($from && $to)
             <div class="wrap" style="margin-top: 18px;">
