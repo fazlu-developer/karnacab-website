@@ -13,7 +13,7 @@
             </label>
         @endforeach
     </div>
-    <label for="{{ $prefix }}pickup">Pickup</label>
+    <label for="{{ $prefix }}pickup">{{ $pickupLabel ?? 'Pickup' }}</label>
     <div class="place-field">
         <input id="{{ $prefix }}pickup" name="pickup" type="text" value="{{ old('pickup', $pickupValue) }}" placeholder="Search pickup" required autocomplete="off" data-place-search data-place-lat="{{ $prefix }}pickup_lat" data-place-lng="{{ $prefix }}pickup_lng">
         <ul class="place-suggest" hidden></ul>
@@ -22,7 +22,7 @@
     <input type="hidden" name="pickup_lng" id="{{ $prefix }}pickup_lng" value="{{ old('pickup_lng', request('pickup_lng')) }}">
     @error('pickup') <div class="error">{{ $message }}</div> @enderror
 
-    <label for="{{ $prefix }}drop">Destination</label>
+    <label for="{{ $prefix }}drop">{{ $dropLabel ?? 'Destination' }}</label>
     <div class="place-field">
         <input id="{{ $prefix }}drop" name="drop" type="text" value="{{ old('drop', $dropValue) }}" placeholder="Search destination" required autocomplete="off" data-place-search data-place-lat="{{ $prefix }}drop_lat" data-place-lng="{{ $prefix }}drop_lng">
         <ul class="place-suggest" hidden></ul>

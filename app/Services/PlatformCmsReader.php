@@ -142,6 +142,7 @@ class PlatformCmsReader
             'navLabel' => $row->nav_label,
             'sortOrder' => (int) $row->sort_order,
             'published' => (bool) $row->published,
+            'imageUrl' => isset($row->image_url) ? (string) $row->image_url : '',
         ];
     }
 

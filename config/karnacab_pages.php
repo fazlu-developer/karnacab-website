@@ -9,9 +9,9 @@ $karnarideLegal = static function (string $stem): string {
 
 return [
     'home' => [
-        'title' => 'Ride when you need to go',
-        'eyebrow' => 'KarnaRide',
-        'lede' => 'KarnaRide is Bihar mobility: rides, parcel, travel, bulk booking and corporate.',
+        'title' => 'A little closer to everywhere.',
+        'eyebrow' => 'For wherever life takes you',
+        'lede' => 'Book a ride, plan a trip, or send a parcel. Fares and services come from the live KarnaRide catalog.',
         'template' => 'home',
         'nav_group' => 'primary',
         'nav_label' => 'Home',
