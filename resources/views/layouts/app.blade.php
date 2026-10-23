@@ -22,6 +22,7 @@
     <meta name="theme-color" content="#1B3A2F">
     <meta name="application-name" content="{{ $brandName }}">
     <meta name="description" content="{{ $seoDescription }}">
+    <meta name="google-site-verification" content="xPYFMKtCocscNL_c8-uGHEydm9OOdJ4G1mqCFZrQYDs" />
     <link rel="canonical" href="{{ $canonical }}">
     <meta property="og:site_name" content="{{ $brandName }}">
     <meta property="og:title" content="{{ $seoTitle }}">
