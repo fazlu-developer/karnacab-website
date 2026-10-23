@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-@section('bodyClass', 'is-home')
 @section('title', $page['seoTitle'] ?? 'KarnaRide')
 @section('meta', $page['seoDescription'] ?? ($page['lede'] ?? ''))
 
@@ -9,147 +8,128 @@
         $catalog = $cms['catalog'] ?? [];
         $promo = $cms['promo'] ?? [];
         $rideTypes = $catalog['rideTypes'] ?? [];
+        $vehicleTypes = $catalog['vehicleTypes'] ?? [];
+        $packages = $catalog['packages'] ?? [];
         $sections = $page['body']['sections'] ?? [];
-        $ways = collect($sections)->first(fn ($row) => !empty($row['cards']) || (empty($row['steps']) && empty($row['ctaHref']) && !empty($row['heading'])));
         $cta = collect($sections)->first(fn ($row) => !empty($row['ctaHref']));
         $how = collect($sections)->first(fn ($row) => !empty($row['steps']));
         $offers = is_array($cms['offers'] ?? null) ? $cms['offers'] : [];
         $firstRide = ($offers['customerFirstRideFreeEnabled'] ?? false);
         $driverGift = ($offers['driverWelcomeBonusEnabled'] ?? true);
         $driverGiftRupees = (int) ($offers['driverWelcomeBonusRupees'] ?? 100);
-        $pages = collect($cms['pages'] ?? []);
-        $cardSlots = is_array($ways) && ! empty($ways['cards']) ? $ways['cards'] : [
-            ['slug' => 'rides', 'label' => 'Ride'],
-            ['slug' => 'travel', 'label' => 'Travel'],
-            ['slug' => 'parcel', 'label' => 'Parcel'],
-        ];
-        $cards = [];
-        foreach ($cardSlots as $slot) {
-            if (! is_array($slot)) {
-                continue;
-            }
-            $slug = (string) ($slot['slug'] ?? '');
-            $source = $slug !== '' ? $pages->first(fn ($row) => ($row['slug'] ?? '') === $slug) : null;
-            $label = $slot['label'] ?? ($source['navLabel'] ?? ($source['title'] ?? 'Service'));
-            $image = trim((string) ($slot['image'] ?? ($source['imageUrl'] ?? '')));
-            if ($image === '') {
-                $image = asset('images/home/'.($slug !== '' ? $slug : 'rides').'.svg');
-            } elseif (! str_starts_with($image, 'http') && ! str_starts_with($image, '//')) {
-                $image = str_starts_with($image, '/uploads/')
-                    ? rtrim((string) config('karnacab.admin_url'), '/').$image
-                    : asset(ltrim($image, '/'));
-            }
-            $cards[] = [
-                'title' => $label,
-                'text' => $slot['text'] ?? ($source['lede'] ?? ''),
-                'href' => $slot['href'] ?? ($source['path'] ?? ($slug !== '' ? '/'.$slug : route('rides'))),
-                'image' => $image,
-            ];
-        }
-        $headline = trim((string) ($page['title'] ?? 'A little closer to everywhere.'));
-        $headlineLead = $headline;
-        $headlineGold = '';
-        if (preg_match('/^(.*?)\s+to\s+(everywhere\.?)$/i', $headline, $headlineParts)) {
-            $headlineLead = trim($headlineParts[1]);
-            $headlineGold = $headlineParts[2];
-        }
-        $waysHeading = is_array($ways) ? ($ways['heading'] ?? 'Your day has places to go. We have a way.') : 'Your day has places to go. We have a way.';
-        $waysText = is_array($ways) ? ($ways['text'] ?? 'Ride, travel and parcel stay in sync with the live catalog.') : 'Ride, travel and parcel stay in sync with the live catalog.';
     @endphp
-
-    <section class="home-hero">
-        <div class="wrap">
-            <div class="home-hero-panel">
-                <div class="home-hero-copy">
-                    <div class="home-kicker">{{ $page['eyebrow'] ?? 'For wherever life takes you' }}</div>
-                    <h1>
-                        {{ $headlineLead }}
-                        @if ($headlineGold !== '')
-                            <br>to <span>{{ $headlineGold }}</span>
-                        @endif
-                    </h1>
-                    <p>{{ $page['lede'] }}</p>
+    <section class="hero">
+        <div class="wrap hero-grid">
+            <div>
+                <div class="eyebrow">{{ $page['eyebrow'] ?? ($cms['site']['tagline'] ?? 'KarnaRide') }}</div>
+                <h1>{{ $page['title'] }}</h1>
+                <p class="lede">{{ $page['lede'] }}</p>
+                <div class="hero-actions">
+                    <a class="btn" href="{{ route('book') }}">Check fares</a>
+                    <a class="btn ghost" href="{{ route('download') }}">Get the apps</a>
+                    <a class="btn ghost" href="{{ route('about') }}">What is KarnaRide</a>
                 </div>
-                <div class="home-hero-photo">
-                    <img src="{{ asset('images/home/hero-road.svg') }}" alt="A KarnaRide car on an open road">
-                    <div class="home-hero-pill">{{ count($rideTypes) ?: 'Live' }} ride products</div>
-                </div>
-                <div class="home-book">
-                    @include('partials.route-form', ['idPrefix' => 'home-', 'pickupLabel' => 'From', 'dropLabel' => 'To'])
+                @if ($firstRide || $driverGift)
+                    <p class="muted">
+                        @if ($firstRide) New riders: first ride free. @endif
+                        @if ($driverGift) New captains: ₹{{ number_format($driverGiftRupees) }} after KYC, vehicle check and first completed ride. @endif
+                    </p>
+                @endif
+                @if (!empty($promo['title']))
+                    <p class="muted"><a href="{{ $promo['href'] ?? route('railway') }}">{{ $promo['title'] }} — {{ $promo['cta'] ?? 'Learn more' }}</a></p>
+                @endif
+                <div class="hero-meta">
+                    <div><strong>{{ count($rideTypes) ?: '—' }}</strong> ride products</div>
+                    <div><strong>{{ count($vehicleTypes) ?: '—' }}</strong> vehicle types</div>
+                    <div><strong>{{ count($packages) }}</strong> travel packages</div>
                 </div>
             </div>
+            <aside class="hero-panel" aria-label="Get route">
+                @include('partials.route-form', ['idPrefix' => 'home-'])
+            </aside>
         </div>
     </section>
 
-    <div class="home-gold" aria-hidden="true"></div>
-
-    <section class="home-ways" id="rides">
+    <section class="section" id="rides">
         <div class="wrap">
-            <div class="home-ways-head">
-                <h2>{{ $waysHeading }}</h2>
-                <p>{{ $waysText }}</p>
+            <div class="section-head">
+                <div class="eyebrow">Ride options</div>
+                <h2>Choose how you move.</h2>
+                <p class="muted lede">Products below come from the live ride catalog. Check a trip to see vehicle prices.</p>
             </div>
-            <div class="home-cards">
-                @foreach ($cards as $card)
-                    <article class="home-card">
-                        <img src="{{ $card['image'] }}" alt="">
-                        <h3>{{ $card['title'] }}</h3>
-                        <p>{{ $card['text'] }}</p>
-                        <a href="{{ $card['href'] }}">Open {{ $card['title'] }}</a>
+            <div class="grid-3">
+                @forelse ($rideTypes as $type)
+                    @php
+                        $productKey = is_array($type) ? ($type['key'] ?? $type['title'] ?? '') : '';
+                        $slug = strtolower(str_replace('_', '-', (string) $productKey));
+                        $href = \Illuminate\Support\Facades\Route::has($slug) ? route($slug) : route('rides');
+                        $label = is_array($type) ? ($type['title'] ?? $type['label'] ?? $type['key'] ?? 'Ride') : 'Ride';
+                    @endphp
+                    <article class="tile">
+                        <h3>{{ $label }}</h3>
+                        <p class="muted">Request this product or preview a map route.</p>
+                        <p><a href="{{ $href }}">Open {{ $label }}</a></p>
                     </article>
-                @endforeach
+                @empty
+                    <article class="tile">
+                        <h3>Rides</h3>
+                        <p class="muted">Catalog will appear when the KarnaRide API is reachable.</p>
+                        <p><a href="{{ route('rides') }}">Explore rides</a></p>
+                    </article>
+                @endforelse
             </div>
-            @if (count($rideTypes) > 0)
-                <div class="home-products">
-                    @foreach ($rideTypes as $type)
-                        @php
-                            $productKey = is_array($type) ? ($type['key'] ?? $type['title'] ?? '') : '';
-                            $slug = strtolower(str_replace('_', '-', (string) $productKey));
-                            $href = \Illuminate\Support\Facades\Route::has($slug) ? route($slug) : route('rides');
-                            $label = is_array($type) ? ($type['title'] ?? $type['label'] ?? $type['key'] ?? 'Ride') : 'Ride';
-                        @endphp
-                        <a href="{{ $href }}">{{ $label }}</a>
-                    @endforeach
-                </div>
-            @endif
         </div>
     </section>
 
     @if ($firstRide || $driverGift)
-        <section class="section" id="launch-offers">
-            <div class="wrap">
-                <div class="section-head">
-                    <div class="eyebrow">KarnaRide offers</div>
-                    <h2>Launch benefits you can use today.</h2>
-                </div>
-                <div class="grid-3">
-                    @if ($firstRide)
-                        <article class="tile">
-                            <h3>First ride free</h3>
-                            <p class="muted">New customer registrations get their first completed ride at ₹0 when this offer is on in admin Ride Settings.</p>
-                        </article>
-                    @endif
-                    @if ($driverGift)
-                        <article class="tile">
-                            <h3>₹{{ number_format($driverGiftRupees) }} driver joining credit</h3>
-                            <p class="muted">Paid after KYC, vehicle verification, account approval and the first completed ride — not on registration.</p>
-                        </article>
-                    @endif
-                </div>
+    <section class="section" id="launch-offers">
+        <div class="wrap">
+            <div class="section-head">
+                <div class="eyebrow">KarnaRide offers</div>
+                <h2>Launch benefits you can use today.</h2>
             </div>
-        </section>
+            <div class="grid-3">
+                @if ($firstRide)
+                    <article class="tile">
+                        <h3>First ride free</h3>
+                        <p class="muted">New customer registrations get their first completed ride at ₹0 when this offer is on in admin Ride Settings.</p>
+                    </article>
+                @endif
+                @if ($driverGift)
+                    <article class="tile">
+                        <h3>₹{{ number_format($driverGiftRupees) }} driver joining credit</h3>
+                        <p class="muted">Paid after KYC, vehicle verification, account approval and the first completed ride — not on registration.</p>
+                    </article>
+                @endif
+            </div>
+        </div>
+    </section>
     @endif
 
-    <section class="section" id="about-karnaride">
+    <section class="section alt" id="about-karnaride">
         <div class="wrap">
             <div class="section-head">
                 <div class="eyebrow">What is KarnaRide</div>
                 <h2>Bihar’s ride, parcel and travel platform.</h2>
-                <p class="muted lede">KarnaRide connects passengers with verified captains for bike, auto, mini, sedan, SUV and traveller trips, plus local parcel and published travel packages.</p>
+                <p class="muted lede">KarnaRide connects passengers with verified captains for bike, auto, mini, sedan, SUV and traveller trips, plus local parcel and published travel packages. Plan on the website. Book in the app.</p>
             </div>
-            @if (!empty($promo['title']))
-                <p><a href="{{ $promo['href'] ?? route('railway') }}">{{ $promo['title'] }} — {{ $promo['cta'] ?? 'Learn more' }}</a></p>
-            @endif
+            <div class="grid-3">
+                <article class="tile">
+                    <h3>For riders</h3>
+                    <p class="muted">Check pickup to drop, compare vehicle fares, then book with OTP login, live tracking, wallet and invoices in the customer app.</p>
+                    <p><a href="{{ route('about') }}">Read about us</a></p>
+                </article>
+                <article class="tile">
+                    <h3>For captains</h3>
+                    <p class="muted">Onboard with KYC, go online in your district, accept trips and get paid through the driver wallet.</p>
+                    <p><a href="{{ route('drive') }}">Drive with us</a></p>
+                </article>
+                <article class="tile">
+                    <h3>For partners</h3>
+                    <p class="muted">Fleet owners, exclusive district franchises, corporate accounts and local ads run from the operator console.</p>
+                    <p><a href="{{ route('operators') }}">Operator console</a></p>
+                </article>
+            </div>
         </div>
     </section>
 

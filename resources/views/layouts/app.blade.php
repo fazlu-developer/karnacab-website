@@ -58,7 +58,7 @@
     @stack('head')
     @livewireStyles
 </head>
-<body class="@yield('bodyClass')">
+<body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
         <a class="brand" href="{{ route('home') }}">
@@ -69,31 +69,22 @@
         </a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu">☰</button>
         <nav class="site-nav" data-site-nav>
-            @if (request()->routeIs('home'))
-                <a href="{{ route('rides') }}">Ride</a>
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'is-active' : '' }}">Home</a>
+            @forelse ($primary as $item)
+                <a href="{{ $item['path'] }}" class="{{ request()->is(ltrim($item['path'], '/')) ? 'is-active' : '' }}">{{ $item['label'] }}</a>
+            @empty
+                <a href="{{ route('rides') }}">Rides</a>
                 <a href="{{ route('travel') }}">Travel</a>
                 <a href="{{ route('parcel') }}">Parcel</a>
-                <a href="{{ route('drive') }}">Drive with us</a>
-                <a href="{{ route('contact') }}">Help</a>
-                <a class="btn dark" href="{{ route('book') }}">Book</a>
-            @else
-                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'is-active' : '' }}">Home</a>
-                @forelse ($primary as $item)
-                    <a href="{{ $item['path'] }}" class="{{ request()->is(ltrim($item['path'], '/')) ? 'is-active' : '' }}">{{ $item['label'] }}</a>
-                @empty
-                    <a href="{{ route('rides') }}">Rides</a>
-                    <a href="{{ route('travel') }}">Travel</a>
-                    <a href="{{ route('parcel') }}">Parcel</a>
-                    <a href="{{ route('corporate') }}">Corporate</a>
-                    <a href="{{ route('franchise') }}">Franchise</a>
-                    <a href="{{ route('contact') }}">Contact</a>
-                @endforelse
-                <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'is-active' : '' }}">About</a>
-                <a href="{{ route('book') }}" class="{{ request()->routeIs('book') ? 'is-active' : '' }}">Check fares</a>
-                <a href="{{ route('cities') }}" class="{{ request()->routeIs('cities') ? 'is-active' : '' }}">Cities</a>
-                <a href="{{ route('route') }}" class="{{ request()->routeIs('route') ? 'is-active' : '' }}">Get route</a>
-                <a class="btn" href="{{ route('download') }}">Get the apps</a>
-            @endif
+                <a href="{{ route('corporate') }}">Corporate</a>
+                <a href="{{ route('franchise') }}">Franchise</a>
+                <a href="{{ route('contact') }}">Contact</a>
+            @endforelse
+            <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'is-active' : '' }}">About</a>
+            <a href="{{ route('book') }}" class="{{ request()->routeIs('book') ? 'is-active' : '' }}">Check fares</a>
+            <a href="{{ route('cities') }}" class="{{ request()->routeIs('cities') ? 'is-active' : '' }}">Cities</a>
+            <a href="{{ route('route') }}" class="{{ request()->routeIs('route') ? 'is-active' : '' }}">Get route</a>
+            <a class="btn" href="{{ route('download') }}">Get the apps</a>
         </nav>
     </header>
     <main id="main">
