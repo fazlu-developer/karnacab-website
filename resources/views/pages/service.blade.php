@@ -9,6 +9,9 @@
         'lede' => $lede,
     ])
     <section class="section">
+        <div class="wrap" style="margin-bottom:18px">
+            <a class="btn" href="{{ route('download') }}">Book in app · ऐप में बुक करें</a>
+        </div>
         <div class="wrap contact-layout">
             <section class="card">
                 <h2>Send a request</h2>

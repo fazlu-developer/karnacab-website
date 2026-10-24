@@ -57,6 +57,7 @@ class PublicPagesTest extends TestCase
             '/outstation',
             '/airport',
             '/railway',
+            '/multi-stop',
             '/parcel',
             '/bihar-parcel',
             '/travel',

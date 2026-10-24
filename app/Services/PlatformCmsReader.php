@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Support\PublicMedia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -46,9 +47,16 @@ class PlatformCmsReader
 
             $presentedPages = $pages->map(fn ($row) => $this->presentPage($row))->all();
             $rideTypes = $this->rideTypes($presentedPages, $ride);
+            $site = $this->presentSite($this->jsonSetting($settings['cms_site'] ?? null));
 
             return [
-                'site' => $this->jsonSetting($settings['cms_site'] ?? null),
+                'site' => $site,
+                'banners' => $this->banners($db),
+                'heads' => $this->heads($db),
+                'coverage' => [
+                    'states' => $this->hasTable($db, 'states') ? $db->table('states')->count() : 0,
+                    'districts' => $districts->count(),
+                ],
                 'promo' => $this->jsonSetting($settings['cms_home_promo'] ?? null),
                 'offers' => [
                     'customerFirstRideFreeEnabled' => $this->flagOn($settings['customer_first_ride_free_enabled'] ?? null),
@@ -62,8 +70,9 @@ class PlatformCmsReader
                 'catalog' => [
                     'rideServices' => $ride->map(fn ($row) => $this->presentService($row))->all(),
                     'parcelServices' => $parcel->map(fn ($row) => $this->presentService($row))->all(),
+                    'services' => $services->map(fn ($row) => $this->presentService($row))->all(),
                     'rideTypes' => $rideTypes,
-                    'vehicleTypes' => config('karnacab.default_catalog.vehicleTypes', []),
+                    'vehicleTypes' => $this->vehicleTypes($db),
                     'districts' => $districts->map(fn ($row) => [
                         'id' => $row->id,
                         'name' => $row->name,
@@ -147,14 +156,125 @@ class PlatformCmsReader
 
     private function presentService(object $row): array
     {
+        $vehicles = $this->col($row, 'vehicle_categories');
+        if (is_string($vehicles)) {
+            $decoded = json_decode($vehicles, true);
+            $vehicles = is_array($decoded) ? $decoded : [];
+        }
+        $key = strtoupper((string) ($this->col($row, 'category_key') ?? ''));
+        if ($key === '') {
+            $key = strtoupper(str_replace('-', '_', (string) $row->slug));
+        }
+
         return [
             'id' => $row->id,
             'slug' => $row->slug,
             'title' => $row->title,
             'subtitle' => $row->subtitle,
             'group' => $row->service_group,
-            'key' => strtoupper(str_replace('-', '_', (string) $row->slug)),
+            'key' => $key,
+            'imageUrl' => PublicMedia::presentMediaUrl($this->col($row, 'image_url'), $this->col($row, 'updated_at')),
+            'vehicles' => is_array($vehicles) ? array_values($vehicles) : [],
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $site
+     * @return array<string, mixed>
+     */
+    private function presentSite(array $site): array
+    {
+        foreach (['logoUrl', 'faviconUrl', 'ogImage', 'customerAppLogoUrl', 'driverAppLogoUrl'] as $key) {
+            if (! empty($site[$key])) {
+                $site[$key] = PublicMedia::presentMediaUrl($site[$key]) ?? '';
+            }
+        }
+
+        return $site;
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function banners($db): array
+    {
+        if (! $this->hasTable($db, 'ad_campaigns')) {
+            return [];
+        }
+        $rows = $db->table('ad_campaigns')
+            ->whereIn('status', ['published', 'active', 'PUBLISHED', 'ACTIVE'])
+            ->orderByDesc('id')
+            ->limit(6)
+            ->get();
+        $out = [];
+        foreach ($rows as $row) {
+            $url = PublicMedia::presentMediaUrl($this->col($row, 'image_url') ?: $this->col($row, 'banner_key'), $this->col($row, 'updated_at'));
+            if ($url === null) {
+                continue;
+            }
+            $out[] = [
+                'title' => $this->col($row, 'title') ?: ($this->col($row, 'name') ?: 'KarnaRide'),
+                'imageUrl' => $url,
+                'href' => $this->col($row, 'click_url') ?: ($this->col($row, 'cta_url') ?: $this->col($row, 'target_url')),
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function heads($db): array
+    {
+        if (! $this->hasTable($db, 'head_info')) {
+            return [];
+        }
+        $rows = $db->table('head_info')->orderBy('role')->limit(4)->get();
+        $out = [];
+        foreach ($rows as $row) {
+            $phone = (string) ($this->col($row, 'support_phone') ?? '');
+            $email = (string) ($this->col($row, 'email') ?? '');
+            if (trim($phone) === '' && trim($email) === '') {
+                continue;
+            }
+            $out[] = [
+                'role' => $this->col($row, 'role'),
+                'phone' => $phone,
+                'email' => $email,
+                'address' => $this->col($row, 'address'),
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function vehicleTypes($db): array
+    {
+        $fallback = config('karnacab.default_catalog.vehicleTypes', []);
+        if (! $this->hasTable($db, 'catalog_vehicle_types')) {
+            return $fallback;
+        }
+        $rows = $db->table('catalog_vehicle_types')->orderBy('id')->get();
+        if ($rows->isEmpty()) {
+            return $fallback;
+        }
+        $out = [];
+        foreach ($rows as $row) {
+            if ($this->col($row, 'active') !== null && ! $this->col($row, 'active')) {
+                continue;
+            }
+            $out[] = [
+                'key' => $this->col($row, 'category_key') ?: ($this->col($row, 'key') ?: $this->col($row, 'slug')),
+                'title' => $this->col($row, 'label') ?: $this->col($row, 'title') ?: $this->col($row, 'name') ?: $this->col($row, 'family_label'),
+                'imageUrl' => PublicMedia::presentMediaUrl($this->col($row, 'image_url') ?: $this->col($row, 'family_image_url'), $this->col($row, 'updated_at')),
+            ];
+        }
+
+        return $out !== [] ? $out : $fallback;
     }
 
     private function rideTypes(array $pages, $rideServices): array
@@ -235,6 +355,11 @@ class PlatformCmsReader
         $decoded = json_decode($raw, true);
 
         return is_array($decoded) ? $decoded : [];
+    }
+
+    private function col(object $row, string $name): mixed
+    {
+        return property_exists($row, $name) ? $row->{$name} : null;
     }
 
     private function flagOn(mixed $value): bool

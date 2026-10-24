@@ -9,12 +9,19 @@ final class AppRelease
      */
     public static function customer(): ?array
     {
-        return self::find('customer', [
+        return self::find('customer', 'apk', [
             'KarnaRide-user.apk',
             'karnaride-customer-latest.apk',
             'KarnaRide-Customer-latest.apk',
-            'KarnaRide-Customer-1.1.11-arm64.apk',
         ], 'KarnaRide-Customer-latest.apk');
+    }
+
+    /**
+     * @return array{path: string, filename: string, bytes: int, version: string}|null
+     */
+    public static function customerAab(): ?array
+    {
+        return self::find('customer', 'aab', [], 'KarnaRide-Customer-latest.aab');
     }
 
     /**
@@ -22,21 +29,29 @@ final class AppRelease
      */
     public static function driver(): ?array
     {
-        return self::find('driver', [
+        return self::find('driver', 'apk', [
             'KarnaRide-driver.apk',
             'karnaride-partner-latest.apk',
             'KarnaRide-Partner-latest.apk',
-            'KarnaRide-Partner-1.1.11-arm64.apk',
         ], 'KarnaRide-Partner-latest.apk');
+    }
+
+    /**
+     * @return array{path: string, filename: string, bytes: int, version: string}|null
+     */
+    public static function driverAab(): ?array
+    {
+        return self::find('driver', 'aab', [], 'KarnaRide-Partner-latest.aab');
     }
 
     /**
      * @param  list<string>  $preferred
      * @return array{path: string, filename: string, bytes: int, version: string}|null
      */
-    private static function find(string $audience, array $preferred, string $downloadName): ?array
+    private static function find(string $audience, string $extension, array $preferred, string $downloadName): ?array
     {
         $candidates = [];
+        $extension = strtolower($extension);
         foreach (self::directories() as $dir) {
             foreach ($preferred as $name) {
                 $path = $dir.DIRECTORY_SEPARATOR.$name;
@@ -44,12 +59,14 @@ final class AppRelease
                     $candidates[] = $path;
                 }
             }
-            $pattern = $audience === 'driver'
-                ? $dir.DIRECTORY_SEPARATOR.'*Partner*.apk'
-                : $dir.DIRECTORY_SEPARATOR.'*Customer*.apk';
-            foreach (glob($pattern) ?: [] as $path) {
-                if (is_file($path)) {
-                    $candidates[] = $path;
+            $patterns = $audience === 'driver'
+                ? ['*Partner*.'.$extension, '*Driver*.'.$extension]
+                : ['*Customer*.'.$extension];
+            foreach ($patterns as $pattern) {
+                foreach (glob($dir.DIRECTORY_SEPARATOR.$pattern) ?: [] as $path) {
+                    if (is_file($path)) {
+                        $candidates[] = $path;
+                    }
                 }
             }
         }

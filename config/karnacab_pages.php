@@ -157,6 +157,16 @@ return [
         'nav_group' => 'rides',
         'nav_label' => 'Airport',
     ],
+    'multi-stop' => [
+        'title' => 'Multi-stop',
+        'eyebrow' => 'Ride',
+        'lede' => 'Several stops on one fare. Book the trip in the KarnaRide app.',
+        'lead_type' => 'RIDE',
+        'product_key' => 'MULTI_STOP',
+        'template' => 'service',
+        'nav_group' => 'rides',
+        'nav_label' => 'Multi-stop',
+    ],
     'railway' => [
         'title' => 'Railway',
         'eyebrow' => 'Transfer',

@@ -18,7 +18,7 @@ class CmsService
     {
         $cached = null;
         try {
-            $cached = Cache::get('karnacab.cms.site');
+            $cached = Cache::get('karnacab.cms.site.v3');
         } catch (Throwable) {
             $cached = null;
         }
@@ -34,7 +34,7 @@ class CmsService
 
         if (! empty($payload['catalog']['rideTypes'])) {
             try {
-                Cache::put('karnacab.cms.site', $payload, 60);
+                Cache::put('karnacab.cms.site.v3', $payload, 60);
             } catch (Throwable) {
             }
         }
@@ -261,7 +261,7 @@ class CmsService
             return '';
         }
         if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://') || str_starts_with($value, '//')) {
-            return $value;
+            return \App\Support\PublicMedia::presentMediaUrl($value) ?? (str_contains($value, 'karnaride.in') ? '' : $value);
         }
         $path = '/'.ltrim($value, '/');
         if (str_starts_with($path, '/uploads/')) {

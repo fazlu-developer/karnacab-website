@@ -17,6 +17,16 @@ class AppDownloadController extends Controller
         return $this->apk(AppRelease::driver(), 'Driver app APK is not published yet.');
     }
 
+    public function customerAab(): BinaryFileResponse
+    {
+        return $this->bundle(AppRelease::customerAab(), 'Customer app bundle is not published yet.');
+    }
+
+    public function driverAab(): BinaryFileResponse
+    {
+        return $this->bundle(AppRelease::driverAab(), 'Driver app bundle is not published yet.');
+    }
+
     /**
      * @param  array{path: string, filename: string, bytes: int, version: string}|null  $file
      */
@@ -26,6 +36,19 @@ class AppDownloadController extends Controller
 
         return response()->download($file['path'], $file['filename'], [
             'Content-Type' => 'application/vnd.android.package-archive',
+            'Cache-Control' => 'private, max-age=300',
+        ]);
+    }
+
+    /**
+     * @param  array{path: string, filename: string, bytes: int, version: string}|null  $file
+     */
+    private function bundle(?array $file, string $missing): BinaryFileResponse
+    {
+        abort_unless($file && is_file($file['path']), 404, $missing);
+
+        return response()->download($file['path'], $file['filename'], [
+            'Content-Type' => 'application/octet-stream',
             'Cache-Control' => 'private, max-age=300',
         ]);
     }

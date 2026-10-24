@@ -142,6 +142,13 @@
                     @foreach (array_merge($ridesNav, $servicesNav) as $item)
                         <li><a href="{{ $item['path'] }}">{{ $item['label'] }}</a></li>
                     @endforeach
+                    @php $footerSlugs = collect(array_merge($ridesNav, $servicesNav))->pluck('slug'); @endphp
+                    @unless ($footerSlugs->contains('multi-stop'))
+                        <li><a href="{{ url('/multi-stop') }}">Multi-stop</a></li>
+                    @endunless
+                    @unless ($footerSlugs->contains('corporate'))
+                        <li><a href="{{ url('/corporate') }}">Corporate</a></li>
+                    @endunless
                     <li><a href="{{ route('book') }}">Check fares</a></li>
                     <li><a href="{{ route('route') }}">Get route</a></li>
                 </ul>
