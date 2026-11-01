@@ -11,8 +11,7 @@
             $services = $catalog['rideTypes'] ?? [];
         }
         $vehicleTypes = $catalog['vehicleTypes'] ?? [];
-        $banners = $cms['banners'] ?? [];
-        $heroBanner = $banners[0] ?? null;
+        $banners = array_values(array_filter($cms['banners'] ?? [], fn ($banner) => ! empty($banner['imageUrl'])));
         $sections = $page['body']['sections'] ?? [];
         $how = collect($sections)->first(fn ($row) => !empty($row['steps']));
         $offers = is_array($cms['offers'] ?? null) ? $cms['offers'] : [];
@@ -70,20 +69,30 @@
                 </div>
             </div>
             <aside class="hero-banner" aria-label="Campaign">
-                @if ($heroBanner)
-                    @if (!empty($heroBanner['href']))
-                        <a href="{{ $heroBanner['href'] }}" rel="noopener">
-                            <img src="{{ $heroBanner['imageUrl'] }}" alt="{{ $heroBanner['title'] }}" onerror="var b=this.closest('.hero-banner');b.classList.add('is-missing');var f=b.querySelector('.banner-fallback');if(f)f.hidden=false;">
-                        </a>
-                    @else
-                        <img src="{{ $heroBanner['imageUrl'] }}" alt="{{ $heroBanner['title'] }}" onerror="var b=this.closest('.hero-banner');b.classList.add('is-missing');var f=b.querySelector('.banner-fallback');if(f)f.hidden=false;">
-                    @endif
-                    <p class="muted">{{ $heroBanner['title'] }}</p>
+                @if ($banners !== [])
+                    <div class="banner-carousel" data-banner-carousel>
+                        @foreach ($banners as $index => $banner)
+                            <figure class="banner-slide {{ $index === 0 ? 'is-on' : '' }}">
+                                @if (!empty($banner['href']))
+                                    <a href="{{ $banner['href'] }}" rel="noopener">
+                                        <img src="{{ $banner['imageUrl'] }}" alt="{{ $banner['title'] }}">
+                                    </a>
+                                @else
+                                    <img src="{{ $banner['imageUrl'] }}" alt="{{ $banner['title'] }}">
+                                @endif
+                            </figure>
+                        @endforeach
+                        @if (count($banners) > 1)
+                            <button class="banner-nav prev" type="button" data-banner-prev aria-label="Previous banner">‹</button>
+                            <button class="banner-nav next" type="button" data-banner-next aria-label="Next banner">›</button>
+                        @endif
+                    </div>
+                @else
+                    <div class="banner-fallback">
+                        <strong>KarnaRide</strong>
+                        <span>City, outstation, parcel, travel, bulk and corporate — book in the app.</span>
+                    </div>
                 @endif
-                <div class="banner-fallback" @if($heroBanner) hidden @endif>
-                    <strong>KarnaRide</strong>
-                    <span>City, outstation, parcel, travel, bulk and corporate — book in the app.</span>
-                </div>
             </aside>
         </div>
     </section>
@@ -258,4 +267,21 @@
             @include('partials.app-download')
         </div>
     </section>
+    <script>
+        document.querySelectorAll('[data-banner-carousel]').forEach(function (root) {
+            var slides = Array.prototype.slice.call(root.querySelectorAll('.banner-slide'));
+            if (slides.length < 2) return;
+            var index = 0;
+            function show(next) {
+                slides[index].classList.remove('is-on');
+                index = (next + slides.length) % slides.length;
+                slides[index].classList.add('is-on');
+            }
+            var prev = root.querySelector('[data-banner-prev]');
+            var next = root.querySelector('[data-banner-next]');
+            if (prev) prev.addEventListener('click', function () { show(index - 1); });
+            if (next) next.addEventListener('click', function () { show(index + 1); });
+            setInterval(function () { show(index + 1); }, 5000);
+        });
+    </script>
 @endsection
