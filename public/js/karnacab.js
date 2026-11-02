@@ -71,6 +71,10 @@ function initRouteMap() {
 
 function initPlaceSearch() {
     document.querySelectorAll('[data-place-search]').forEach((input) => {
+        if (input.dataset.bound === '1') {
+            return;
+        }
+        input.dataset.bound = '1';
         const wrap = input.closest('.place-field');
         const list = wrap?.querySelector('.place-suggest');
         if (!list) {
@@ -125,6 +129,83 @@ function initPlaceSearch() {
             }
         });
     });
+}
+
+document.addEventListener('click', (event) => {
+    const megaBtn = event.target.closest('.nav-mega-btn');
+    if (megaBtn) {
+        const open = megaBtn.getAttribute('aria-expanded') === 'true';
+        megaBtn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        megaBtn.parentElement.classList.toggle('is-open', !open);
+        return;
+    }
+    if (!event.target.closest('.nav-mega')) {
+        document.querySelectorAll('.nav-mega').forEach((node) => {
+            node.classList.remove('is-open');
+            node.querySelector('.nav-mega-btn')?.setAttribute('aria-expanded', 'false');
+        });
+    }
+
+    const link = event.target.closest('a');
+    if (!link || link.target || link.hasAttribute('download') || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+    }
+    const url = new URL(link.href, window.location.origin);
+    if (url.origin !== window.location.origin) {
+        return;
+    }
+    if (/\.(apk|aab|xml|txt|pdf)$/i.test(url.pathname)) {
+        return;
+    }
+    if (url.pathname.startsWith('/apps/')) {
+        return;
+    }
+    event.preventDefault();
+    loadPage(url.href, true);
+});
+
+window.addEventListener('popstate', () => loadPage(window.location.href, false));
+
+function loadPage(href, push) {
+    const main = document.getElementById('main');
+    if (!main) {
+        window.location.href = href;
+        return;
+    }
+    main.classList.add('is-loading');
+    fetch(href, { headers: { Accept: 'text/html' }, credentials: 'same-origin' })
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error('page');
+            }
+            return res.text();
+        })
+        .then((html) => {
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const next = doc.getElementById('main');
+            if (!next) {
+                window.location.href = href;
+                return;
+            }
+            main.innerHTML = next.innerHTML;
+            document.title = doc.title || document.title;
+            const canonical = document.querySelector('link[rel="canonical"]');
+            const nextCanonical = doc.querySelector('link[rel="canonical"]');
+            if (canonical && nextCanonical) {
+                canonical.href = nextCanonical.href;
+            }
+            if (push) {
+                history.pushState({}, '', href);
+            }
+            window.scrollTo(0, 0);
+            document.querySelector('[data-site-nav]')?.classList.remove('open');
+            initRouteMap();
+            initPlaceSearch();
+        })
+        .catch(() => {
+            window.location.href = href;
+        })
+        .finally(() => main.classList.remove('is-loading'));
 }
 
 function selectPlace(input, list, row) {

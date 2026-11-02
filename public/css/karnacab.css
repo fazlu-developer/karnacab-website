@@ -3,9 +3,11 @@
     --ink-soft: #163026;
     --paper: #f4f1ea;
     --paper-2: #ebe6db;
-    --amber: #f5a623;
+    --amber: #f5c518;
     --amber-dark: #c47d0b;
-    --amber-glow: rgba(245, 166, 35, 0.35);
+    --amber-glow: rgba(245, 197, 24, 0.35);
+    --logo-green: #1b7a32;
+    --logo-red: #e10600;
     --forest: #1f4d3a;
     --forest-deep: #123328;
     --mint: #d8efe3;
@@ -66,10 +68,10 @@ button, input { font-family: inherit; }
     gap: 12px;
     flex-wrap: wrap;
     padding: 10px 20px;
-    background: rgba(12, 26, 20, 0.92);
+    background: rgba(12, 26, 20, 0.94);
     backdrop-filter: blur(16px);
     color: #fff;
-    border-bottom: 1px solid rgba(245, 166, 35, 0.18);
+    border-bottom: 1px solid rgba(245, 197, 24, 0.28);
 }
 
 .brand {
@@ -92,12 +94,12 @@ button, input { font-family: inherit; }
 }
 
 .brand-lockup-img {
-    height: 88px;
+    height: 52px;
     width: auto;
-    max-width: 240px;
+    max-width: 180px;
     object-fit: contain;
     background: #fff;
-    border-radius: 14px;
+    border-radius: 12px;
     padding: 4px;
 }
 
@@ -168,14 +170,24 @@ button, input { font-family: inherit; }
     box-shadow: 0 8px 20px var(--amber-glow);
     transition: transform .15s ease, background .15s ease;
 }
-.btn:hover { background: #ffb53a; transform: translateY(-1px); }
+.btn:hover { background: #ffd84a; color: var(--ink); transform: translateY(-1px); }
 .btn.ghost {
-    background: transparent;
-    color: #fff;
-    border: 1px solid rgba(255,255,255,.28);
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid #d7e0ec;
     box-shadow: none;
 }
-.btn.ghost:hover { background: rgba(255,255,255,.08); }
+.btn.ghost:hover { background: #f3f6fb; }
+.hero .btn.ghost,
+.site-header .btn.ghost,
+.page-hero .btn.ghost {
+    background: transparent;
+    color: #fff;
+    border-color: rgba(255,255,255,.35);
+}
+.hero .btn.ghost:hover,
+.site-header .btn.ghost:hover,
+.page-hero .btn.ghost:hover { background: rgba(255,255,255,.08); }
 .btn.dark {
     background: var(--ink);
     color: #fff;
@@ -247,9 +259,9 @@ select:focus {
     overflow: hidden;
     color: #fff;
     background:
-        radial-gradient(circle at 80% 10%, rgba(245,166,35,.28), transparent 32%),
-        radial-gradient(circle at 10% 90%, rgba(31,77,58,.7), transparent 40%),
-        linear-gradient(160deg, #07140f 0%, #123328 48%, #0c1a14 100%);
+        radial-gradient(circle at 78% 18%, rgba(245,197,24,.28), transparent 28%),
+        radial-gradient(circle at 12% 90%, rgba(27,122,50,.45), transparent 36%),
+        linear-gradient(165deg, #07140f 0%, #123328 52%, #0c1a14 100%);
     padding: 72px 0 88px;
 }
 
@@ -417,7 +429,7 @@ select:focus {
 
 .page-hero {
     background:
-        radial-gradient(circle at 85% 10%, rgba(245,166,35,.25), transparent 36%),
+        radial-gradient(circle at 85% 10%, rgba(245,197,24,.25), transparent 36%),
         linear-gradient(160deg, #07140f 0%, #123328 100%);
     color: #fff;
     padding: 52px 0 48px;
@@ -731,9 +743,11 @@ textarea:focus {
 .trust-strip span {
     border: 1px solid var(--line);
     background: #fff;
+    color: var(--ink);
     border-radius: 999px;
     padding: 6px 12px;
     font-size: 0.85rem;
+    font-weight: 700;
 }
 .service-grid, .vehicle-grid {
     display: grid;
@@ -792,4 +806,98 @@ textarea:focus {
     .book-aside { position: static; min-height: 0; }
     .hero { padding: 48px 0 56px; }
     .section { padding: 52px 0; }
+    .nav-mega-panel { position: static; display: none; min-width: 0; box-shadow: none; padding: 0; }
+    .nav-mega.is-open .nav-mega-panel { display: grid; }
+}
+
+.nav-mega { position: relative; }
+.nav-mega-btn {
+    background: transparent;
+    color: rgba(255,255,255,.86);
+    border: 0;
+    border-radius: 999px;
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.nav-mega.is-open .nav-mega-btn,
+.nav-mega-btn:hover { color: #fff; background: rgba(255,255,255,.08); }
+.nav-mega-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: min(560px, 80vw);
+    padding: 14px;
+    border-radius: 18px;
+    background: #10261c;
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 18px 50px rgba(0,0,0,.28);
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    z-index: 30;
+}
+.nav-mega.is-open .nav-mega-panel,
+.nav-mega:hover .nav-mega-panel { display: grid; }
+.nav-mega-panel a { white-space: normal; }
+#main.is-loading { opacity: 0.55; }
+@media (prefers-reduced-motion: reduce) {
+    #main, .route-line, .float-card, .phone { transition: none; animation: none; }
+}
+
+.ride-stage {
+    position: relative;
+    min-height: 520px;
+    display: grid;
+    place-items: center;
+}
+.phone {
+    width: 270px;
+    background: #0c1a14;
+    border-radius: 36px;
+    padding: 12px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.12);
+}
+.phone-bar, .phone-sheet {
+    display: flex;
+    justify-content: space-between;
+    color: #9fb0c7;
+    font-size: .75rem;
+    padding: 8px 10px;
+}
+.phone-map { width: 100%; height: 280px; border-radius: 22px; display: block; }
+.phone-sheet {
+    display: block;
+    background: #fff;
+    color: #0c1a14;
+    border-radius: 16px;
+    margin-top: 8px;
+}
+.phone-sheet strong, .float-card strong { display: block; }
+.route-line {
+    stroke-dasharray: 420;
+    stroke-dashoffset: 420;
+    animation: draw-route 2.4s ease forwards;
+}
+.float-card {
+    position: absolute;
+    background: #fff;
+    color: #0c1a14;
+    border-radius: 16px;
+    padding: 12px 14px;
+    width: 180px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.18);
+    font-size: .85rem;
+}
+.float-card.left { left: 0; top: 70px; }
+.float-card.right { right: 0; bottom: 70px; }
+.banner-row { display: grid; gap: 16px; }
+.banner-row img { width: 100%; border-radius: 18px; max-height: 280px; object-fit: cover; }
+@keyframes draw-route { to { stroke-dashoffset: 0; } }
+@media (max-width: 960px) {
+    .float-card { display: none; }
+    .ride-stage { min-height: 0; }
 }

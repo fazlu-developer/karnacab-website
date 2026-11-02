@@ -53,13 +53,13 @@
     <section class="hero hero-present">
         <div class="wrap hero-grid">
             <div>
-                <div class="eyebrow">{{ $page['eyebrow'] ?? 'KarnaRide' }} · बिहार की सवारी</div>
-                <h1>{{ $page['title'] }}</h1>
-                <p class="lede">{{ $page['lede'] }}</p>
+                <div class="eyebrow">{{ $page['eyebrow'] ?? 'KarnaRide' }} · Your Journey, Our Priority.</div>
+                <h1>Move Smarter. Travel Better. Go Further.</h1>
+                <p class="lede">From everyday rides and airport transfers to outstation journeys, parcel delivery and corporate transportation, KarnaRide brings every journey together in one reliable platform.</p>
                 <div class="hero-actions">
-                    <a class="btn" href="#services">Twelve services</a>
-                    <a class="btn ghost" href="{{ route('download') }}">Get the apps</a>
-                    <a class="btn ghost" href="{{ route('about') }}">What is KarnaRide</a>
+                    <a class="btn" href="{{ route('book') }}">Book Your Ride</a>
+                    <a class="btn ghost" href="#services">Explore Our Services</a>
+                    <a class="btn ghost" href="{{ route('download') }}">Download App</a>
                 </div>
                 <div class="trust-strip">
                     <span>Verified captains</span>
@@ -68,40 +68,52 @@
                     <span>Same cars in the app</span>
                 </div>
             </div>
-            <aside class="hero-banner" aria-label="Campaign">
-                @if ($banners !== [])
-                    <div class="banner-carousel" data-banner-carousel>
-                        @foreach ($banners as $index => $banner)
-                            <figure class="banner-slide {{ $index === 0 ? 'is-on' : '' }}">
-                                @if (!empty($banner['href']))
-                                    <a href="{{ $banner['href'] }}" rel="noopener">
-                                        <img src="{{ $banner['imageUrl'] }}" alt="{{ $banner['title'] }}">
-                                    </a>
-                                @else
-                                    <img src="{{ $banner['imageUrl'] }}" alt="{{ $banner['title'] }}">
-                                @endif
-                            </figure>
-                        @endforeach
-                        @if (count($banners) > 1)
-                            <button class="banner-nav prev" type="button" data-banner-prev aria-label="Previous banner">‹</button>
-                            <button class="banner-nav next" type="button" data-banner-next aria-label="Next banner">›</button>
-                        @endif
+            <aside class="ride-stage" aria-hidden="true">
+                <div class="float-card left">
+                    <strong>Live tracking</strong>
+                    <span>Driver on the road route</span>
+                </div>
+                <div class="phone">
+                    <div class="phone-bar"><span>9:41</span><span>KarnaRide</span></div>
+                    <svg class="phone-map" viewBox="0 0 280 360" role="img">
+                        <rect width="280" height="360" fill="#eef3f8"/>
+                        <path d="M20 40h240M20 90h240M20 140h240M20 190h240M20 240h240M20 290h240M40 20v320M90 20v320M140 20v320M190 20v320M240 20v320" stroke="#d5e0ec" stroke-width="10"/>
+                        <path class="route-line" d="M70 280 C90 220, 120 210, 150 170 S210 120, 220 70" fill="none" stroke="#1b7a32" stroke-width="7" stroke-linecap="round"/>
+                        <circle cx="70" cy="280" r="9" fill="#1b7a32"/>
+                        <circle cx="220" cy="70" r="9" fill="#e10600"/>
+                    </svg>
+                    <div class="phone-sheet">
+                        <strong>Pickup confirmed</strong>
+                        <span>Track the assigned vehicle in the app</span>
                     </div>
-                @else
-                    <div class="banner-fallback">
-                        <strong>KarnaRide</strong>
-                        <span>City, outstation, parcel, travel, bulk and corporate — book in the app.</span>
-                    </div>
-                @endif
+                </div>
+                <div class="float-card right">
+                    <strong>Every service</strong>
+                    <span>Rides, parcel, travel, corporate</span>
+                </div>
             </aside>
         </div>
     </section>
+
+    @if ($banners !== [])
+        <section class="section alt">
+            <div class="wrap banner-row">
+                @foreach ($banners as $banner)
+                    @if (!empty($banner['href']))
+                        <a href="{{ $banner['href'] }}" rel="noopener"><img src="{{ $banner['imageUrl'] }}" alt="{{ $banner['title'] }}"></a>
+                    @else
+                        <img src="{{ $banner['imageUrl'] }}" alt="{{ $banner['title'] }}">
+                    @endif
+                @endforeach
+            </div>
+        </section>
+    @endif
 
     <section class="section" id="services">
         <div class="wrap">
             <div class="section-head">
                 <div class="eyebrow">12 services · बारह सेवाएं</div>
-                <h2>One company. The same catalog as the apps.</h2>
+                <h2>One Platform. Every Journey.</h2>
                 <p class="muted lede">Each tile is its own product. Open it to read more, then book in the KarnaRide app.</p>
             </div>
             <div class="service-grid">

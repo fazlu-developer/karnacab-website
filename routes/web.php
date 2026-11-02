@@ -47,6 +47,26 @@ Route::get('/advertise-with-us', fn () => redirect('/advertise', 301));
 Route::get('/login', fn () => redirect('/')->with('status', 'Book rides in the KarnaRide customer app.'))->name('login');
 Route::get('/register', fn () => redirect('/')->with('status', 'Create your account in the KarnaRide customer or driver app.'))->name('register');
 
+$serviceAliases = [
+    'services/city-ride' => 'local-cab',
+    'services/bike-ride' => 'rides',
+    'services/auto-ride' => 'rides',
+    'services/one-way' => 'one-way',
+    'services/round-trip' => 'round-way',
+    'services/outstation' => 'outstation',
+    'services/airport-transfer' => 'airport',
+    'services/cab-rental' => 'rental',
+    'services/parcel-delivery' => 'parcel',
+    'services/ambulance' => 'ambulance',
+    'services/bulk-booking' => 'bulk-booking',
+    'services/corporate' => 'corporate',
+    'services/tour-travel' => 'travel',
+    'services/traveller' => 'rides',
+];
+foreach ($serviceAliases as $path => $slug) {
+    Route::get('/'.$path, [PageController::class, 'show'])->defaults('slug', $slug)->name(str_replace('/', '.', $path));
+}
+
 foreach (array_keys(config('karnacab_pages')) as $slug) {
     if (in_array($slug, ['home', 'privacy', 'terms'], true)) {
         continue;

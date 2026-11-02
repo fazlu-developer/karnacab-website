@@ -71,21 +71,32 @@
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu">☰</button>
         <nav class="site-nav" data-site-nav>
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'is-active' : '' }}">Home</a>
-            @forelse ($primary as $item)
-                <a href="{{ $item['path'] }}" class="{{ request()->is(ltrim($item['path'], '/')) ? 'is-active' : '' }}">{{ $item['label'] }}</a>
-            @empty
-                <a href="{{ route('rides') }}">Rides</a>
-                <a href="{{ route('travel') }}">Travel</a>
-                <a href="{{ route('parcel') }}">Parcel</a>
-                <a href="{{ route('corporate') }}">Corporate</a>
-                <a href="{{ route('franchise') }}">Franchise</a>
-                <a href="{{ route('contact') }}">Contact</a>
-            @endforelse
-            <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'is-active' : '' }}">About</a>
-            <a href="{{ route('book') }}" class="{{ request()->routeIs('book') ? 'is-active' : '' }}">Check fares</a>
-            <a href="{{ route('cities') }}" class="{{ request()->routeIs('cities') ? 'is-active' : '' }}">Cities</a>
-            <a href="{{ route('route') }}" class="{{ request()->routeIs('route') ? 'is-active' : '' }}">Get route</a>
-            <a class="btn" href="{{ route('download') }}">Get the apps</a>
+            <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'is-active' : '' }}">About Us</a>
+            <div class="nav-mega">
+                <button type="button" class="nav-mega-btn" aria-expanded="false">Services</button>
+                <div class="nav-mega-panel">
+                    <a href="{{ route('local-cab') }}">City Ride</a>
+                    <a href="{{ route('rides') }}">Bike Ride</a>
+                    <a href="{{ route('rides') }}">Auto Ride</a>
+                    <a href="{{ route('one-way') }}">One Way Cab</a>
+                    <a href="{{ route('round-way') }}">Round Trip</a>
+                    <a href="{{ route('outstation') }}">Outstation</a>
+                    <a href="{{ route('airport') }}">Airport Transfer</a>
+                    <a href="{{ route('rental') }}">Cab Rental</a>
+                    <a href="{{ route('parcel') }}">Parcel Delivery</a>
+                    <a href="{{ route('ambulance') }}">Ambulance</a>
+                    <a href="{{ route('bulk-booking') }}">Bulk Booking</a>
+                    <a href="{{ route('corporate') }}">Corporate Transportation</a>
+                    <a href="{{ route('travel') }}">Tour &amp; Travel</a>
+                    <a href="{{ route('rides') }}">Traveller / Group Travel</a>
+                </div>
+            </div>
+            <a href="{{ route('how-it-works') }}">How It Works</a>
+            <a href="{{ route('drive') }}">Drive With Us</a>
+            <a href="{{ route('corporate') }}">Corporate</a>
+            <a href="{{ route('contact') }}">Contact Us</a>
+            <a class="btn ghost" href="{{ route('download') }}">Download App</a>
+            <a class="btn" href="{{ route('book') }}">Book a Ride</a>
         </nav>
     </header>
     <main id="main">
@@ -169,8 +180,7 @@
             </div>
         </div>
         <div class="wrap legal">
-            <span>© {{ date('Y') }} {{ $site['name'] ?? 'KarnaRide' }}</span>
-            <span>Public website · catalog from KarnaRide API</span>
+            <span>© {{ date('Y') }} {{ $site['name'] ?? 'KarnaRide' }}. A brand of KARNACAB TRANSPORT SERVICE PRIVATE LIMITED.</span>
         </div>
     </footer>
     @stack('scripts')

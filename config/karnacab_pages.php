@@ -348,6 +348,30 @@ return [
             'html' => $karnarideLegal('software-license'),
         ],
     ],
+    'ambulance' => [
+        'title' => 'Ambulance',
+        'eyebrow' => 'Emergency',
+        'lede' => 'Request an ambulance in the KarnaRide app where an ambulance vehicle is available. The booked fare starts at ₹0. The driver enters the amount collected after the trip.',
+        'template' => 'legal',
+        'nav_group' => 'services',
+        'nav_label' => 'Ambulance',
+        'body' => [
+            'sections' => [
+                [
+                    'heading' => 'How a request works',
+                    'text' => 'Choose pickup and hospital in the customer app. Nearby ambulance drivers are offered the trip. You can track the assigned vehicle on the map.',
+                ],
+                [
+                    'heading' => 'Fare',
+                    'text' => 'The booking is created at ₹0. No city-ride fare is charged at confirmation. After the trip, the driver reports the amount collected. That report stays pending until an admin verifies it.',
+                ],
+                [
+                    'heading' => 'Availability',
+                    'text' => 'An ambulance is offered only when a verified ambulance vehicle is online near the pickup. KarnaRide does not promise an ambulance in every city.',
+                ],
+            ],
+        ],
+    ],
     'support' => [
         'title' => 'Support',
         'eyebrow' => 'Help',
